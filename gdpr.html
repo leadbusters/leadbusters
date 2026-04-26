@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="sk" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ochrana osobných údajov | LeadBusters</title>
+  <meta name="description" content="Zásady ochrany osobných údajov LeadBusters. Transparentnosť a bezpečnosť vašich dát.">
+  <meta name="robots" content="noindex, follow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;700;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { accent: '#FACC15', darkBg: '#050505' } } }
+    }
+  </script>
+
+  <style>
+    :root { --accent: #FACC15; --bg: #050505; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      margin: 0; padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: #fff;
+      overflow-x: hidden;
+      cursor: none;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    .grotesk { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.04em; }
+
+    /* Cursor */
+    #cursor {
+      width: 8px; height: 8px; background: var(--accent);
+      border-radius: 50%; position: fixed; pointer-events: none;
+      z-index: 100000; mix-blend-mode: difference; will-change: transform;
+      transform: translate(-50%,-50%);
+    }
+    #cursor-follower {
+      width: 36px; height: 36px; border: 1.5px solid var(--accent);
+      border-radius: 50%; position: fixed; pointer-events: none;
+      z-index: 99999; transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
+      will-change: transform; transform: translate(-50%,-50%);
+    }
+    @media (hover: none) {
+      body { cursor: auto; }
+      #cursor, #cursor-follower { display: none; }
+    }
+
+    /* Noise */
+    .noise::before {
+      content: ""; position: fixed; inset: 0;
+      background: url('https://grainy-gradients.vercel.app/noise.svg');
+      opacity: 0.04; pointer-events: none; z-index: 0;
+    }
+
+    /* Grid bg */
+    .grid-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(250,204,21,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(250,204,21,0.02) 1px, transparent 1px);
+      background-size: 70px 70px;
+    }
+
+    /* Orbs */
+    .orb {
+      position: fixed; border-radius: 50%;
+      filter: blur(130px); pointer-events: none; z-index: 0;
+    }
+
+    /* Glass */
+    .glass {
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Section cards */
+    .law-section {
+      border-left: 2px solid rgba(250,204,21,0.15);
+      padding-left: 1.5rem;
+      transition: border-color 0.3s ease;
+    }
+    .law-section:hover { border-color: rgba(250,204,21,0.5); }
+
+    /* Nav dots */
+    .nav-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      cursor: pointer; transition: all 0.3s ease;
+      display: block;
+    }
+    .nav-dot.active, .nav-dot:hover { background: var(--accent); transform: scale(1.5); }
+
+    /* Highlight pill */
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(250,204,21,0.08);
+      border: 1px solid rgba(250,204,21,0.15);
+      padding: 4px 12px; border-radius: 999px;
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--accent);
+    }
+
+    /* Info boxes */
+    .info-box {
+      background: rgba(250,204,21,0.04);
+      border: 1px solid rgba(250,204,21,0.1);
+      border-radius: 16px; padding: 1rem 1.25rem;
+    }
+    .info-box-green {
+      background: rgba(34,197,94,0.04);
+      border: 1px solid rgba(34,197,94,0.1);
+      border-radius: 16px; padding: 1rem 1.25rem;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: rgba(250,204,21,0.3); border-radius: 2px; }
+
+    /* Focus */
+    :focus-visible { outline: 2px solid rgba(250,204,21,0.5); outline-offset: 3px; border-radius: 4px; }
+
+    /* Section reveal */
+    .reveal-section { opacity: 0; transform: translateY(24px); }
+
+    @media (prefers-reduced-motion: reduce) {
+      body { cursor: auto; }
+      #cursor, #cursor-follower { display: none; }
+      .reveal-section { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+
+<body class="noise relative">
+
+  <!-- Cursor -->
+  <div id="cursor" aria-hidden="true"></div>
+  <div id="cursor-follower" aria-hidden="true"></div>
+
+  <!-- Skip -->
+  <a href="#main-content" class="sr-only focus:not-sr-only fixed top-4 left-4 z-[200000] bg-yellow-400 text-black px-4 py-2 rounded font-bold text-sm">Preskočiť na obsah</a>
+
+  <!-- Backgrounds -->
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="orb" style="width:400px;height:400px;background:rgba(250,204,21,0.05);top:-15%;left:-10%;" aria-hidden="true"></div>
+  <div class="orb" style="width:300px;height:300px;background:rgba(34,197,94,0.03);bottom:-10%;right:-5%;" aria-hidden="true"></div>
+
+  <!-- Top accent line -->
+  <div class="fixed top-0 left-0 w-full h-[2px] z-50" style="background: linear-gradient(90deg, transparent, #FACC15 30%, #22C55E 70%, transparent);" aria-hidden="true"></div>
+
+  <!-- Main layout -->
+  <div class="relative z-10 min-h-screen flex flex-col lg:flex-row">
+
+    <!-- LEFT SIDEBAR (sticky nav) -->
+    <aside class="hidden lg:flex flex-col justify-between w-64 xl:w-72 shrink-0 p-10 sticky top-0 h-screen" aria-label="Navigácia dokumentom">
+
+      <!-- Brand -->
+      <div>
+        <a href="index.html" class="flex items-center gap-2 mb-12 opacity-60 hover:opacity-100 transition-opacity" aria-label="Späť na LeadBusters">
+          <svg class="h-6 w-auto fill-yellow-400" viewBox="0 0 100 100" aria-hidden="true">
+            <path d="M10,90 L10,60 L30,50 L30,80 Z" opacity="0.6"/>
+            <path d="M10,60 L30,50 L50,60 L30,70 Z"/>
+            <path d="M30,50 L30,20 L50,10 L70,20 Z" opacity="0.8"/>
+            <path d="M50,10 L70,20 L90,10 L70,0 Z"/>
+            <path d="M70,20 L90,30 L90,60 L70,50 Z"/>
+            <path d="M50,60 L70,50 L90,60 L70,70 Z" opacity="0.7"/>
+            <path d="M70,50 L90,60 L90,90 L70,80 Z" opacity="0.9"/>
+          </svg>
+          <span class="grotesk font-bold tracking-[0.4em] text-xs uppercase italic text-white">LEAD<span class="text-yellow-400">BUSTERS</span></span>
+        </a>
+
+        <!-- Section nav -->
+        <nav aria-label="Sekcie dokumentu">
+          <p class="text-[9px] uppercase tracking-[0.3em] text-gray-600 font-black mb-4">Obsah</p>
+          <ul class="space-y-3" id="section-nav">
+            <li><a href="#s1" class="section-link flex items-center gap-3 text-[11px] font-bold text-gray-500 hover:text-yellow-400 transition-colors group" data-section="s1"><span class="nav-dot" id="dot-s1"></span>Prevádzkovateľ</a></li>
+            <li><a href="#s2" class="section-link flex items-center gap-3 text-[11px] font-bold text-gray-500 hover:text-yellow-400 transition-colors group" data-section="s2"><span class="nav-dot" id="dot-s2"></span>Zbierané údaje</a></li>
+            <li><a href="#s3" class="section-link flex items-center gap-3 text-[11px] font-bold text-gray-500 hover:text-yellow-400 transition-colors group" data-section="s3"><span class="nav-dot" id="dot-s3"></span>Právny základ</a></li>
+            <li><a href="#s4" class="section-link flex items-center gap-3 text-[11px] font-bold text-gray-500 hover:text-yellow-400 transition-colors group" data-section="s4"><span class="nav-dot" id="dot-s4"></span>Doba uchovávania</a></li>
+            <li><a href="#s5" class="section-link flex items-center gap-3 text-[11px] font-bold text-gray-500 hover:text-yellow-400 transition-colors group" data-section="s5"><span class="nav-dot" id="dot-s5"></span>Tretie strany</a></li>
+            <li><a href="#s6" class="section-link flex items-center gap-3 text-[11px] font-bold text-gray-500 hover:text-yellow-400 transition-colors group" data-section="s6"><span class="nav-dot" id="dot-s6"></span>Vaše práva</a></li>
+            <li><a href="#s7" class="section-link flex items-center gap-3 text-[11px] font-bold text-gray-500 hover:text-yellow-400 transition-colors group" data-section="s7"><span class="nav-dot" id="dot-s7"></span>Cookies</a></li>
+            <li><a href="#s8" class="section-link flex items-center gap-3 text-[11px] font-bold text-gray-500 hover:text-yellow-400 transition-colors group" data-section="s8"><span class="nav-dot" id="dot-s8"></span>Kontakt & sťažnosti</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Bottom info -->
+      <div class="glass p-4 rounded-2xl">
+        <p class="text-[9px] uppercase tracking-widest text-gray-600 font-black mb-2">Posledná aktualizácia</p>
+        <p class="text-white font-bold text-sm">Apríl 2026</p>
+        <div class="mt-3 pt-3 border-t border-white/5">
+          <p class="text-[9px] text-gray-600 leading-relaxed">V súlade s nariadením GDPR (EÚ) 2016/679</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT: Content -->
+    <main id="main-content" class="flex-1 px-6 md:px-12 lg:px-16 py-12 lg:py-20 max-w-3xl" role="main">
+
+      <!-- Mobile back link -->
+      <a href="index.html" class="lg:hidden inline-flex items-center gap-2 text-yellow-400 text-[10px] font-black uppercase tracking-widest mb-10 hover:text-white transition" aria-label="Späť na hlavnú stránku">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Späť domov
+      </a>
+
+      <!-- Header -->
+      <header class="mb-16 reveal-section">
+        <div class="pill mb-6">
+          <span aria-hidden="true">🔒</span> GDPR — GDPR (EÚ) 2016/679
+        </div>
+        <h1 class="grotesk text-4xl md:text-6xl font-black italic uppercase leading-none mb-6">
+          Ochrana<br><span class="text-yellow-400">osobných<br>údajov.</span>
+        </h1>
+        <p class="text-gray-400 text-base leading-relaxed max-w-lg">
+          Vaše dáta sú u nás v bezpečí. Tento dokument vysvetľuje čo zbierame, prečo to robíme a aké máte práva. Bez právnického žargónu, iba jasné veci.
+        </p>
+
+        <!-- Quick trust badges -->
+        <div class="flex flex-wrap gap-3 mt-8">
+          <div class="info-box-green flex items-center gap-2">
+            <span class="text-green-400 text-xs font-black">✓</span>
+            <span class="text-green-400 text-[10px] font-black uppercase tracking-widest">Nepredávame dáta</span>
+          </div>
+          <div class="info-box-green flex items-center gap-2">
+            <span class="text-green-400 text-xs font-black">✓</span>
+            <span class="text-green-400 text-[10px] font-black uppercase tracking-widest">Bez spamu</span>
+          </div>
+          <div class="info-box-green flex items-center gap-2">
+            <span class="text-green-400 text-xs font-black">✓</span>
+            <span class="text-green-400 text-[10px] font-black uppercase tracking-widest">Kedykoľvek odvolateľné</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Divider -->
+      <div class="border-t border-white/5 mb-12" aria-hidden="true"></div>
+
+      <!-- SECTIONS -->
+      <div class="space-y-14">
+
+        <!-- 1 -->
+        <section id="s1" class="law-section reveal-section" aria-labelledby="s1-heading">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <h2 id="s1-heading" class="text-[10px] uppercase font-black tracking-[0.3em] text-yellow-400">01 — Prevádzkovateľ</h2>
+          </div>
+          <h3 class="text-xl font-black text-white mb-4">Kto zodpovedá za vaše dáta?</h3>
+          <p class="text-gray-400 leading-relaxed mb-4">
+            Prevádzkovateľom tohto webu a systému LeadBusters je:
+          </p>
+          <div class="info-box mb-4">
+            <p class="text-white font-bold mb-1">Filip Simkovič</p>
+            <p class="text-gray-400 text-sm">Liptovská Kokava 7, Liptovský Mikuláš</p>
+            <p class="text-gray-400 text-sm">IČO: <span class="text-white font-bold">[doplniť]</span></p>
+          </div>
+          <p class="text-gray-400 leading-relaxed">
+            V prípade otázok nás kontaktujte na e-mail:
+            <a href="mailto:info.leadbusters@gmail.com" class="text-yellow-400 font-bold hover:text-white transition ml-1">info.leadbusters@gmail.com</a>
+          </p>
+        </section>
+
+        <!-- 2 -->
+        <section id="s2" class="law-section reveal-section" aria-labelledby="s2-heading">
+          <h2 id="s2-heading" class="text-[10px] uppercase font-black tracking-[0.3em] text-yellow-400 mb-4">02 — Zbierané údaje</h2>
+          <h3 class="text-xl font-black text-white mb-4">Čo a prečo zbierame?</h3>
+          <p class="text-gray-400 leading-relaxed mb-6">Zbierame výlučne to, čo je nevyhnutné pre poskytnutie služby. Nič navyše.</p>
+
+          <div class="space-y-4">
+            <div class="glass p-5 rounded-2xl">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-lg" aria-hidden="true">📋</span>
+                <span class="text-white font-black text-sm uppercase tracking-wider">Kontaktný formulár</span>
+              </div>
+              <p class="text-gray-400 text-sm leading-relaxed">Meno, e-mailová adresa, informácie o vašom regióne a odbore podnikania. Tieto údaje slúžia výhradne na to, aby sme vás mohli kontaktovať s výsledkami analýzy a návrhom spolupráce.</p>
+            </div>
+            <div class="glass p-5 rounded-2xl">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-lg" aria-hidden="true">📊</span>
+                <span class="text-white font-black text-sm uppercase tracking-wider">Analytika (len so súhlasom)</span>
+              </div>
+              <p class="text-gray-400 text-sm leading-relaxed">Anonymizované dáta o pohybe na stránke prostredníctvom Google Analytics. Zbierajú sa len ak udelíte súhlas cez cookie banner. Tieto dáta neidentifikujú vašu osobu.</p>
+            </div>
+            <div class="glass p-5 rounded-2xl">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-lg" aria-hidden="true">🌐</span>
+                <span class="text-white font-black text-sm uppercase tracking-wider">Technické dáta</span>
+              </div>
+              <p class="text-gray-400 text-sm leading-relaxed">IP adresa a základné informácie o prehliadači — zbierajú sa automaticky pri návšteve webu pre bezpečnostné účely a sú uložené maximálne 90 dní.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3 -->
+        <section id="s3" class="law-section reveal-section" aria-labelledby="s3-heading">
+          <h2 id="s3-heading" class="text-[10px] uppercase font-black tracking-[0.3em] text-yellow-400 mb-4">03 — Právny základ</h2>
+          <h3 class="text-xl font-black text-white mb-4">Na akom základe spracúvame dáta?</h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-4 p-4 rounded-xl border border-white/5">
+              <span class="text-yellow-400 font-black text-sm shrink-0 mt-0.5">Art. 6(1)(b)</span>
+              <div>
+                <p class="text-white font-bold text-sm mb-1">Plnenie zmluvy / predzmluvné vzťahy</p>
+                <p class="text-gray-500 text-xs leading-relaxed">Formulárové dáta spracúvame, aby sme mohli reagovať na vašu obchodnú požiadavku.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 rounded-xl border border-white/5">
+              <span class="text-yellow-400 font-black text-sm shrink-0 mt-0.5">Art. 6(1)(a)</span>
+              <div>
+                <p class="text-white font-bold text-sm mb-1">Súhlas</p>
+                <p class="text-gray-500 text-xs leading-relaxed">Analytické cookies zbierame výhradne na základe vášho súhlasu udeleného cez cookie banner, ktorý môžete kedykoľvek odvolať.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 rounded-xl border border-white/5">
+              <span class="text-yellow-400 font-black text-sm shrink-0 mt-0.5">Art. 6(1)(f)</span>
+              <div>
+                <p class="text-white font-bold text-sm mb-1">Oprávnený záujem</p>
+                <p class="text-gray-500 text-xs leading-relaxed">Technické logy (IP, prehliadač) spracúvame na ochranu bezpečnosti webu a predchádzanie zneužitiu.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4 -->
+        <section id="s4" class="law-section reveal-section" aria-labelledby="s4-heading">
+          <h2 id="s4-heading" class="text-[10px] uppercase font-black tracking-[0.3em] text-yellow-400 mb-4">04 — Doba uchovávania</h2>
+          <h3 class="text-xl font-black text-white mb-4">Ako dlho máme vaše dáta?</h3>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center p-4 rounded-xl border border-white/5 group hover:border-yellow-400/20 transition-colors">
+              <span class="text-gray-400 text-sm font-bold">Formulárové dáta (bez spolupráce)</span>
+              <span class="text-yellow-400 font-black text-sm grotesk">12 mesiacov</span>
+            </div>
+            <div class="flex justify-between items-center p-4 rounded-xl border border-white/5 group hover:border-yellow-400/20 transition-colors">
+              <span class="text-gray-400 text-sm font-bold">Dáta pri aktívnej spolupráci</span>
+              <span class="text-yellow-400 font-black text-sm grotesk">Zákonné lehoty</span>
+            </div>
+            <div class="flex justify-between items-center p-4 rounded-xl border border-white/5 group hover:border-yellow-400/20 transition-colors">
+              <span class="text-gray-400 text-sm font-bold">Technické logy</span>
+              <span class="text-yellow-400 font-black text-sm grotesk">90 dní</span>
+            </div>
+            <div class="flex justify-between items-center p-4 rounded-xl border border-white/5 group hover:border-yellow-400/20 transition-colors">
+              <span class="text-gray-400 text-sm font-bold">Analytické cookies</span>
+              <span class="text-yellow-400 font-black text-sm grotesk">26 mesiacov</span>
+            </div>
+          </div>
+          <div class="info-box mt-4">
+            <p class="text-yellow-400 text-xs font-black uppercase tracking-widest mb-1">Poznámka</p>
+            <p class="text-gray-400 text-sm leading-relaxed">Po uplynutí doby uchovávania sú všetky vaše osobné údaje automaticky a bezpečne vymazané z našich systémov.</p>
+          </div>
+        </section>
+
+        <!-- 5 -->
+        <section id="s5" class="law-section reveal-section" aria-labelledby="s5-heading">
+          <h2 id="s5-heading" class="text-[10px] uppercase font-black tracking-[0.3em] text-yellow-400 mb-4">05 — Tretie strany</h2>
+          <h3 class="text-xl font-black text-white mb-4">S kým zdieľame dáta?</h3>
+          <p class="text-gray-400 leading-relaxed mb-6"><strong class="text-white">Nikdy nepredávame vaše dáta tretím stranám.</strong> Niektoré nástroje, ktoré používame, však môžu dáta spracúvať ako sprostredkovatelia:</p>
+          <div class="space-y-3">
+            <div class="glass p-4 rounded-xl flex items-start gap-4">
+              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 text-sm" aria-hidden="true">G</div>
+              <div>
+                <p class="text-white font-black text-sm mb-0.5">Google Analytics</p>
+                <p class="text-gray-500 text-xs leading-relaxed">Anonymizovaná webová analytika. Aktivuje sa len po vašom súhlase. Google LLC, USA (prenos na základe štandardných zmluvných doložiek).</p>
+              </div>
+            </div>
+            <div class="glass p-4 rounded-xl flex items-start gap-4">
+              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 text-sm" aria-hidden="true">M</div>
+              <div>
+                <p class="text-white font-black text-sm mb-0.5">Make.com (webhook)</p>
+                <p class="text-gray-500 text-xs leading-relaxed">Automatizačná platforma na spracovanie formulárových dát a ich doručenie nášmu tímu. Celesco s.r.o., EÚ.</p>
+              </div>
+            </div>
+            <div class="glass p-4 rounded-xl flex items-start gap-4">
+              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 text-sm" aria-hidden="true">C</div>
+              <div>
+                <p class="text-white font-black text-sm mb-0.5">Calendly</p>
+                <p class="text-gray-500 text-xs leading-relaxed">Systém na rezerváciu hovorov. Používa sa len ak sa rozhodnete rezervovať termín. Calendly LLC, USA.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6 -->
+        <section id="s6" class="law-section reveal-section" aria-labelledby="s6-heading">
+          <h2 id="s6-heading" class="text-[10px] uppercase font-black tracking-[0.3em] text-yellow-400 mb-4">06 — Vaše práva</h2>
+          <h3 class="text-xl font-black text-white mb-4">Čo môžete požadovať?</h3>
+          <p class="text-gray-400 leading-relaxed mb-6">Podľa GDPR máte nasledujúce práva, ktoré môžete uplatniť kedykoľvek e-mailom:</p>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div class="glass p-4 rounded-xl">
+              <p class="text-yellow-400 text-xs font-black uppercase tracking-wider mb-1">Právo na prístup</p>
+              <p class="text-gray-500 text-xs leading-relaxed">Zistíte, aké dáta o vás máme a na aký účel.</p>
+            </div>
+            <div class="glass p-4 rounded-xl">
+              <p class="text-yellow-400 text-xs font-black uppercase tracking-wider mb-1">Právo na opravu</p>
+              <p class="text-gray-500 text-xs leading-relaxed">Opravíme nesprávne alebo neúplné údaje.</p>
+            </div>
+            <div class="glass p-4 rounded-xl">
+              <p class="text-yellow-400 text-xs font-black uppercase tracking-wider mb-1">Právo na vymazanie</p>
+              <p class="text-gray-500 text-xs leading-relaxed">„Právo byť zabudnutý" — vymažeme všetky vaše dáta.</p>
+            </div>
+            <div class="glass p-4 rounded-xl">
+              <p class="text-yellow-400 text-xs font-black uppercase tracking-wider mb-1">Právo na prenosnosť</p>
+              <p class="text-gray-500 text-xs leading-relaxed">Dostanete vaše dáta v strojovo čitateľnom formáte.</p>
+            </div>
+            <div class="glass p-4 rounded-xl">
+              <p class="text-yellow-400 text-xs font-black uppercase tracking-wider mb-1">Právo na obmedzenie</p>
+              <p class="text-gray-500 text-xs leading-relaxed">Pozastavíme spracúvanie vašich dát po dobu riešenia.</p>
+            </div>
+            <div class="glass p-4 rounded-xl">
+              <p class="text-yellow-400 text-xs font-black uppercase tracking-wider mb-1">Právo namietať</p>
+              <p class="text-gray-500 text-xs leading-relaxed">Môžete namietať voči spracúvaniu na základe opr. záujmu.</p>
+            </div>
+          </div>
+          <div class="info-box mt-5">
+            <p class="text-yellow-400 text-xs font-black uppercase tracking-widest mb-1">⏱ Lehota odpovede</p>
+            <p class="text-gray-400 text-sm leading-relaxed">Na vaše žiadosti odpovedáme do <strong class="text-white">30 dní</strong> od ich doručenia, v súlade s čl. 12 GDPR.</p>
+          </div>
+        </section>
+
+        <!-- 7 -->
+        <section id="s7" class="law-section reveal-section" aria-labelledby="s7-heading">
+          <h2 id="s7-heading" class="text-[10px] uppercase font-black tracking-[0.3em] text-yellow-400 mb-4">07 — Cookies</h2>
+          <h3 class="text-xl font-black text-white mb-4">Aké cookies používame?</h3>
+          <div class="space-y-3">
+            <div class="border border-white/5 rounded-xl overflow-hidden">
+              <div class="flex items-center justify-between p-4 border-b border-white/5">
+                <div class="flex items-center gap-3">
+                  <span class="w-2 h-2 bg-green-400 rounded-full" aria-hidden="true"></span>
+                  <span class="text-white font-black text-sm">Nevyhnutné</span>
+                </div>
+                <span class="text-green-400 text-[9px] font-black uppercase tracking-widest border border-green-500/20 bg-green-500/5 px-2 py-1 rounded-full">Vždy aktívne</span>
+              </div>
+              <p class="text-gray-500 text-xs leading-relaxed p-4">Zabezpečujú základné fungovanie webu (napr. pamätanie súhlasu s cookies). Bez nich web nemôže fungovať. Nepotrebujú váš súhlas.</p>
+            </div>
+            <div class="border border-white/5 rounded-xl overflow-hidden">
+              <div class="flex items-center justify-between p-4 border-b border-white/5">
+                <div class="flex items-center gap-3">
+                  <span class="w-2 h-2 bg-yellow-400 rounded-full" aria-hidden="true"></span>
+                  <span class="text-white font-black text-sm">Analytické</span>
+                </div>
+                <span class="text-yellow-400 text-[9px] font-black uppercase tracking-widest border border-yellow-400/20 bg-yellow-400/5 px-2 py-1 rounded-full">Na základe súhlasu</span>
+              </div>
+              <p class="text-gray-500 text-xs leading-relaxed p-4">Google Analytics 4 — anonymizovaná štatistika návštevnosti. Aktivujú sa len po vašom výslovnom súhlase. Súhlas môžete kedykoľvek odvolať vymazaním cookies v prehliadači.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 8 -->
+        <section id="s8" class="law-section reveal-section" aria-labelledby="s8-heading">
+          <h2 id="s8-heading" class="text-[10px] uppercase font-black tracking-[0.3em] text-yellow-400 mb-4">08 — Kontakt & sťažnosti</h2>
+          <h3 class="text-xl font-black text-white mb-4">Kde sa obrátit?</h3>
+          <p class="text-gray-400 leading-relaxed mb-6">Pre uplatnenie vašich práv alebo akékoľvek otázky ohľadom spracúvania dát nás kontaktujte:</p>
+
+          <a href="mailto:info.leadbusters@gmail.com"
+             class="flex items-center justify-between p-5 rounded-2xl border border-yellow-400/20 bg-yellow-400/5 group hover:bg-yellow-400/10 transition-all mb-4">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 bg-yellow-400/10 rounded-xl flex items-center justify-center text-yellow-400 shrink-0 group-hover:bg-yellow-400/20 transition-colors" aria-hidden="true">✉</div>
+              <div>
+                <p class="text-white font-black text-sm">info.leadbusters@gmail.com</p>
+                <p class="text-gray-500 text-[10px] uppercase tracking-widest">Odpovedáme do 48 hodín</p>
+              </div>
+            </div>
+            <svg class="w-4 h-4 text-yellow-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+
+          <div class="glass p-5 rounded-2xl">
+            <p class="text-[10px] uppercase font-black tracking-widest text-gray-500 mb-2">Dozorný orgán SR</p>
+            <p class="text-white font-bold text-sm mb-1">Úrad na ochranu osobných údajov SR</p>
+            <a href="https://dataprotection.gov.sk" target="_blank" rel="noopener noreferrer" class="text-yellow-400 text-xs hover:text-white transition">dataprotection.gov.sk</a>
+            <p class="text-gray-500 text-xs mt-2 leading-relaxed">Ak nie ste spokojní s tým, ako sme vybavili vašu žiadosť, máte právo podať sťažnosť tomuto úradu.</p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Footer strip -->
+      <div class="mt-16 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 reveal-section">
+        <a href="index.html" class="text-gray-600 hover:text-white transition text-[10px] uppercase tracking-[0.3em] font-bold flex items-center gap-2">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          Späť na hlavnú stránku
+        </a>
+        <p class="text-gray-700 text-[9px] uppercase tracking-widest grotesk italic">LeadBusters © 2026 — Všetky práva vyhradené</p>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+  // =============================================
+  // CUSTOM CURSOR
+  // =============================================
+  (function() {
+    if (!window.matchMedia('(hover: hover)').matches) return;
+    const cur = document.getElementById('cursor');
+    const fol = document.getElementById('cursor-follower');
+    document.addEventListener('mousemove', (e) => {
+      gsap.to(cur, { x: e.clientX, y: e.clientY, duration: 0.08 });
+      gsap.to(fol, { x: e.clientX, y: e.clientY, duration: 0.28 });
+    });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => { cur.style.transform = 'translate(-50%,-50%) scale(3.5)'; });
+      el.addEventListener('mouseleave', () => { cur.style.transform = 'translate(-50%,-50%) scale(1)'; });
+    });
+  })();
+
+  // =============================================
+  // SCROLL REVEAL
+  // =============================================
+  (function() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const els = document.querySelectorAll('.reveal-section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          gsap.to(entry.target, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(el => observer.observe(el));
+  })();
+
+  // =============================================
+  // ACTIVE SECTION TRACKING (sidebar dots)
+  // =============================================
+  (function() {
+    const sections = ['s1','s2','s3','s4','s5','s6','s7','s8'];
+    const dots = {};
+    sections.forEach(id => { dots[id] = document.getElementById('dot-' + id); });
+
+    function setActive(id) {
+      sections.forEach(s => {
+        const dot = dots[s];
+        if (!dot) return;
+        dot.classList.toggle('active', s === id);
+        const link = dot.closest('a');
+        if (link) link.style.color = s === id ? 'var(--accent)' : '';
+      });
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    // Smooth scroll for sidebar links
+    document.querySelectorAll('.section-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.getElementById(link.dataset.section);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

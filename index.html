@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="sk" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeadBusters | Strategic Digital Dominance</title>
+    <meta name="description" content="Elitný marketingový tím zameraný výhradne na remeselníkov a stavebné firmy. Generujeme dopyty, nie lajky.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.leadbusters.sk">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="LeadBusters | Váš Rast. Náš Kód.">
+    <meta property="og:description" content="Elitný marketingový startup zameraný výhradne na remeselníkov a stavebné firmy. Generujeme dopyty, nie lajky.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1504307651254-35680f356f12?q=80&w=1200&auto=format&fit=crop">
+    <meta property="og:url" content="https://www.leadbusters.sk">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="sk_SK">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LeadBusters | Váš Rast. Náš Kód.">
+    <meta name="twitter:description" content="Elitný marketingový startup zameraný výhradne na remeselníkov a stavebné firmy. Generujeme dopyty, nie lajky.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1504307651254-35680f356f12?q=80&w=1200&auto=format&fit=crop">
+
+    <!-- PERFORMANCE: Preconnect pre externé zdroje -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://get.geojs.io">
+    <link rel="dns-prefetch" href="https://hook.eu1.make.com">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;700;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: { colors: { accent: '#FACC15', darkBg: '#050505', lightBg: '#f8f8f8' } }
+            }
+        }
+    </script>
+
+    <!-- JSON-LD Štruktúrované dáta pre SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MarketingAgency",
+      "name": "LeadBusters",
+      "description": "Elitný marketingový startup zameraný výhradne na remeselníkov a stavebné firmy.",
+      "url": "https://www.leadbusters.sk",
+      "telephone": "+421908403692",
+      "email": "info.leadbusters@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "SK"
+      },
+      "sameAs": [],
+      "priceRange": "€€",
+      "openingHours": "Mo-Fr 08:00-12:00"
+    }
+    </script>
+
+    <style>
+        :root { --accent: #FACC15; --bg: #050505; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: none;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .syncopate { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.04em; }
+
+        /* Preloader */
+        #preloader {
+            position: fixed; inset: 0; background: var(--bg);
+            z-index: 999999; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Custom cursor - pridaný will-change pre GPU akceleráciu */
+        #cursor {
+            width: 8px; height: 8px; background: var(--accent);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 100000; mix-blend-mode: difference;
+            will-change: transform;
+        }
+        #cursor-follower {
+            width: 40px; height: 40px; border: 1px solid var(--accent);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 99999; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            will-change: transform;
+        }
+
+        /* Fallback pre zariadenia kde cursor: none nefunguje správne */
+        @media (hover: none) {
+            body { cursor: auto; }
+            #cursor, #cursor-follower { display: none; }
+        }
+
+        .noise::before {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05; pointer-events: none; z-index: 9998;
+        }
+
+        .glass {
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .dark .glass:hover { border-color: var(--accent); box-shadow: 0 0 30px rgba(250, 204, 21, 0.1); }
+
+        .reveal { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
+        .reveal span { display: block; transform: translateY(100%); transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active span { transform: translateY(0); }
+
+        /* Marquee */
+        .marquee-wrapper { overflow: hidden; white-space: nowrap; width: 100%; display: flex; }
+        .marquee-content { display: flex; animation: marquee 25s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Floating CTA */
+        #floating-cta {
+            position: fixed; bottom: 30px; right: 30px; z-index: 9000;
+            transform: translateY(150px); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #floating-cta.visible { transform: translateY(0); }
+
+        /* Live notifikácia */
+        #live-notif {
+            position: fixed; bottom: 30px; left: 30px; z-index: 9000;
+            transform: translateX(-400px); transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #live-notif.show { transform: translateX(0); }
+
+        /* X-Ray Slider */
+        .xray-container {
+            position: relative; width: 100%; height: 550px;
+            border-radius: 40px; overflow: hidden;
+            cursor: ew-resize; user-select: none; touch-action: pan-y;
+        }
+        .xray-before {
+            position: absolute; inset: 0;
+            background: #e5e7eb; color: #333;
+            display: flex; flex-direction: column;
+            align-items: flex-start; justify-content: flex-start;
+        }
+        .xray-after {
+            position: absolute; top: 0; left: 0; bottom: 0; width: 50%;
+            background: #0a0a0a; color: white;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-right: 4px solid var(--accent); overflow: hidden; z-index: 10;
+        }
+        .xray-after-content {
+            position: absolute; width: 100vw; max-width: 100%;
+            height: 100%; display: flex; flex-direction: column;
+            align-items: flex-start; justify-content: flex-start;
+        }
+        .xray-handle {
+            position: absolute; top: 0; bottom: 0; left: 50%; width: 40px;
+            margin-left: -20px; display: flex; align-items: center; justify-content: center; z-index: 20;
+        }
+        .xray-handle-button {
+            width: 40px; height: 40px; background: var(--accent);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: black; font-weight: bold; box-shadow: 0 0 20px rgba(250,204,21,0.5);
+        }
+
+        /* Quiz kroky */
+        .quiz-step { display: none; opacity: 0; transition: opacity 0.5s ease; }
+        .quiz-step.active { display: block; opacity: 1; }
+
+        /* Profit Simulator Slider */
+        .sim-slider {
+            -webkit-appearance: none; width: 100%; height: 6px;
+            background: #222; border-radius: 5px; outline: none;
+        }
+        .sim-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 24px; height: 24px; border-radius: 50%;
+            background: var(--accent); cursor: pointer;
+            border: 4px solid #000;
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.5);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .sim-slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
+
+        /* Radar animácia */
+        @keyframes radar {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Interceptor terminal */
+        .interceptor-line { animation: slideDownFade 0.5s ease-out forwards; }
+        @keyframes slideDownFade {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cookie banner - konzistentné class-based zobrazenie */
+        #cookie-banner {
+            position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100000;
+            padding: 1rem; transform: translateY(100%);
+            transition: transform 0.7s ease-out;
+        }
+        #cookie-banner.visible { transform: translateY(0); }
+
+        /* ========= HAMBURGER MOBILE NAV ========= */
+        #mobile-menu {
+            position: fixed; inset: 0; background: #050505; z-index: 99998;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        #mobile-menu.open { opacity: 1; pointer-events: all; }
+        .hamburger span {
+            display: block; width: 24px; height: 2px;
+            background: currentColor; transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+            transform-origin: center;
+        }
+        .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+        /* ========= STATS TICKER ========= */
+        .stat-item { border-right: 1px solid rgba(255,255,255,0.06); }
+        .stat-item:last-child { border-right: none; }
+        .stat-num { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.04em; }
+
+        /* ========= CASE STUDIES ========= */
+        .case-card { transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+        .case-card:hover { transform: translateY(-6px); }
+        .result-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2);
+            padding: 3px 10px; border-radius: 999px;
+            font-size: 10px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.1em; color: #22c55e;
+        }
+
+        /* ========= TESTIMONIALS ========= */
+        .stars { color: #FACC15; letter-spacing: 2px; }
+        .testimonial-card {
+            transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+        }
+        .testimonial-card:hover { border-color: rgba(250,204,21,0.3) !important; }
+
+        /* ========= FAQ ACCORDION ========= */
+        .faq-item { border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .faq-answer {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1), padding 0.3s ease;
+        }
+        .faq-answer.open { max-height: 400px; }
+        .faq-icon {
+            width: 28px; height: 28px; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 16px; flex-shrink: 0; transition: all 0.35s ease;
+            color: rgba(255,255,255,0.3);
+        }
+        .faq-item.open .faq-icon {
+            background: #FACC15; border-color: #FACC15;
+            color: black; transform: rotate(45deg);
+        }
+        .faq-question { cursor: pointer; }
+
+        /* ========= SECTION REVEAL ========= */
+        .sr-up { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+        .sr-up.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+
+<body class="noise dark:bg-darkBg bg-lightBg dark:text-white text-black">
+
+    <!-- Scroll progress bar -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-[3px] bg-yellow-400 z-[9999] transition-all duration-150 rounded-r-full shadow-[0_0_10px_#FACC15]" style="width: 0%;"></div>
+
+    <!-- Preloader -->
+    <div id="preloader" class="dark:bg-darkBg bg-lightBg">
+        <div class="text-6xl md:text-9xl font-black syncopate italic text-yellow-400" id="loader-text">0%</div>
+    </div>
+
+    <!-- Cursors -->
+    <div id="cursor" aria-hidden="true"></div>
+    <div id="cursor-follower" aria-hidden="true"></div>
+
+    <!-- Top bar -->
+    <div class="fixed top-0 w-full bg-yellow-400 text-black text-center text-[9px] md:text-[10px] py-2 font-bold uppercase tracking-widest z-[1000] syncopate shadow-md" role="banner">
+        Spúšťame systémy. Prijímame 2 exkluzívnych partnerov na prvý mesiac.
+    </div>
+
+    <!-- Navigácia -->
+    <nav class="fixed top-8 w-full z-[100] p-6 md:p-10 flex justify-between items-center bg-gradient-to-b dark:from-[#050505] from-white to-transparent pointer-events-none" aria-label="Hlavná navigácia">
+        <div class="w-full flex justify-between items-center pointer-events-auto">
+            <a href="#" class="magnetic flex items-center gap-3" aria-label="LeadBusters - Domov">
+                <svg class="h-10 w-auto fill-yellow-400" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <defs><filter id="LB-Glow"><feGaussianBlur in="SourceGraphic" stdDeviation="2.5"/></filter></defs>
+                    <g filter="url(#LB-Glow)">
+                        <path d="M10,90 L10,30 L50,10 L90,30 L90,90 L50,70 Z" opacity="0.1" fill="white"/>
+                        <path d="M10,90 L10,60 L30,50 L30,80 Z" opacity="0.6"/>
+                        <path d="M10,60 L30,50 L50,60 L30,70 Z"/>
+                        <path d="M30,50 L30,20 L50,10 L70,20 Z" opacity="0.8"/>
+                        <path d="M50,10 L70,20 L90,10 L70,0 Z"/>
+                        <path d="M70,20 L90,30 L90,60 L70,50 Z"/>
+                        <path d="M50,60 L70,50 L90,60 L70,70 Z" opacity="0.7"/>
+                        <path d="M70,50 L90,60 L90,90 L70,80 Z" opacity="0.9"/>
+                    </g>
+                </svg>
+                <div class="syncopate font-bold tracking-[0.6em] text-lg uppercase italic dark:text-white text-black">
+                    LEAD<span class="text-yellow-400 font-black">BUSTERS</span>
+                </div>
+            </a>
+
+            <div class="flex gap-6 items-center font-bold text-[10px] tracking-[0.3em] uppercase">
+                <div class="hidden xl:flex flex-col items-end border-r border-gray-500/20 pr-8">
+                    <span class="text-gray-500 text-[8px]">Infolinka (Po – Pi: 4h/deň)</span>
+                    <a href="tel:+421908403692" class="hover:text-yellow-400 transition tracking-tighter text-sm dark:text-white text-black">0908 403 692</a>
+                </div>
+                <a href="#kontakt" class="magnetic bg-yellow-400 text-black px-10 py-4 rounded-full hover:bg-white transition-colors shadow-2xl hidden md:inline-block">Získať dopyty</a>
+                <!-- Hamburger (mobile) -->
+                <button id="hamburger-btn" class="hamburger md:hidden flex flex-col gap-[5px] p-2 dark:text-white text-black z-[99999] relative" aria-label="Otvoriť menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile fullscreen menu -->
+    <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Mobilná navigácia">
+        <div class="noise::before absolute inset-0" aria-hidden="true"></div>
+        <nav class="flex flex-col items-center gap-8 relative z-10" aria-label="Mobilná navigácia">
+            <a href="#kontakt" onclick="closeMobileMenu()" class="text-4xl font-black syncopate italic uppercase text-white hover:text-yellow-400 transition">Získať dopyty</a>
+            <a href="#cenik-heading" onclick="closeMobileMenu(); document.getElementById('cenik-heading').scrollIntoView({behavior:'smooth'})" class="text-2xl font-bold uppercase text-gray-400 hover:text-white transition tracking-widest">Cenník</a>
+            <a href="#kontakt" onclick="closeMobileMenu()" class="text-2xl font-bold uppercase text-gray-400 hover:text-white transition tracking-widest">Kontakt</a>
+            <a href="tel:+421908403692" class="text-xl font-black text-yellow-400 mt-4 border border-yellow-400/30 px-8 py-4 rounded-full">0908 403 692</a>
+        </nav>
+        <div class="absolute bottom-10 left-0 right-0 text-center">
+            <p class="text-gray-700 text-[9px] uppercase tracking-widest font-bold syncopate italic">LeadBusters © 2026</p>
+        </div>
+    </div>
+
+    <!-- Live notifikácia -->
+    <div id="live-notif" class="glass p-4 rounded-2xl flex items-center gap-4 shadow-2xl border-l-4 border-yellow-400 max-w-[280px]" role="status" aria-live="polite" aria-atomic="true">
+        <div class="w-10 h-10 bg-yellow-400/20 rounded-full flex items-center justify-center shrink-0 text-yellow-400 font-bold" aria-hidden="true">!</div>
+        <div>
+            <p class="text-[10px] uppercase font-black text-gray-500 mb-1">Dopyt vygenerovaný</p>
+            <p class="text-xs font-bold dark:text-white text-black" id="notif-text">Práve teraz: Pokrývačstvo, Nitra</p>
+        </div>
+    </div>
+
+    <!-- Floating CTA -->
+    <div id="floating-cta" class="flex flex-col gap-3 items-end">
+        <a href="https://wa.me/421908403692" target="_blank" rel="noopener noreferrer" class="magnetic bg-[#25D366] text-white p-4 rounded-full shadow-2xl flex items-center justify-center group" aria-label="Kontaktujte nás cez WhatsApp">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .018 5.396.015 12.03c0 2.12.554 4.189 1.605 6.035L0 24l6.105-1.602a11.83 11.83 0 005.937 1.598h.005c6.637 0 12.032-5.395 12.035-12.03a11.791 11.791 0 00-3.517-8.487"></path></svg>
+        </a>
+        <a href="#kontakt" class="magnetic dark:bg-white bg-black dark:text-black text-white px-6 py-4 rounded-full font-bold uppercase tracking-widest text-[10px] shadow-2xl flex items-center gap-2">
+            Máte otázku? 💬
+        </a>
+    </div>
+
+    <!-- ====== HERO SEKCIA ====== -->
+    <section class="min-h-screen flex flex-col justify-center px-8 md:px-24 pt-32 pb-20 relative" aria-labelledby="hero-heading">
+        <div class="inline-block border border-red-500/30 bg-red-500/10 px-4 py-2 rounded-full mb-8 text-[10px] font-bold uppercase tracking-widest text-red-500 self-start shadow-[0_0_20px_rgba(239,68,68,0.2)]">
+            <span class="w-2 h-2 bg-red-500 rounded-full inline-block animate-ping mr-2" aria-hidden="true"></span>
+            Detekovaná oblasť: <span id="user-city">Skener aktívny...</span> — <span class="text-green-400">Exkluzivita zatiaľ voľná</span>
+        </div>
+
+        <div class="reveal active">
+            <h1 id="hero-heading" class="text-[14vw] md:text-[10vw] font-black leading-[0.8] syncopate italic uppercase tracking-tighter mb-8">
+                <span>VÁŠ RAST</span><br>
+                <span class="text-yellow-400">NÁŠ KÓD.</span>
+            </h1>
+        </div>
+
+        <p class="text-xl md:text-2xl text-gray-500 font-light leading-relaxed max-w-xl mb-12">
+            Nezaujímate nás vy, zaujímajú nás vaši klienti. Programujeme systémy, ktoré menia lokálnych majstrov na trhových lídrov.
+        </p>
+
+        <div class="flex flex-col md:flex-row gap-8 items-start">
+            <div class="glass inline-flex flex-col p-6 rounded-3xl min-w-[280px] border-l-4 border-yellow-400">
+                <span class="text-[10px] uppercase font-bold text-gray-500 tracking-[0.2em] mb-2">Hodnota vygenerovaných zákaziek</span>
+                <div class="text-4xl md:text-5xl font-black text-white flex items-center gap-2">
+                    <span id="money-ticker" class="syncopate tracking-tighter text-yellow-400">0</span>
+                    <span class="dark:text-white text-black">€</span>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" aria-hidden="true"></span>
+                    <span class="text-[9px] uppercase text-gray-400 font-bold">Systém pripravený.</span>
+                </div>
+            </div>
+
+            <div class="w-full max-w-sm bg-black border border-gray-800 p-5 rounded-3xl shadow-xl">
+                <div class="flex justify-between text-[10px] uppercase font-bold tracking-widest text-gray-500 mb-3">
+                    <span>Kapacita systému</span>
+                    <span class="text-yellow-400">87% Plná</span>
+                </div>
+                <div class="w-full h-3 bg-gray-900 rounded-full overflow-hidden mb-3" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" aria-label="Kapacita systému 87%">
+                    <div class="h-full bg-gradient-to-r from-yellow-600 to-yellow-400 w-[87%] relative rounded-full">
+                        <div class="absolute inset-0 bg-white/20 animate-[pulse_2s_infinite]"></div>
+                    </div>
+                </div>
+                <p class="text-center text-[10px] text-gray-400 uppercase tracking-widest">
+                    Zostávajú <span class="text-white font-black text-xs px-1">2</span> voľné licencie na <span id="current-month">tento mesiac</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ====== STATS TICKER ====== -->
+    <section class="py-0 border-t border-gray-500/20 bg-[#080808] overflow-hidden" aria-label="Štatistiky LeadBusters">
+        <div class="grid grid-cols-2 md:grid-cols-4">
+            <div class="stat-item py-10 px-8 text-center sr-up">
+                <div class="stat-num text-4xl md:text-5xl font-black text-yellow-400 mb-2" data-target="847500" data-suffix=" €" id="stat-1">0 €</div>
+                <p class="text-[9px] uppercase tracking-[0.25em] text-gray-500 font-black">Hodnota zákaziek</p>
+            </div>
+            <div class="stat-item py-10 px-8 text-center sr-up" style="transition-delay: 0.1s">
+                <div class="stat-num text-4xl md:text-5xl font-black text-white mb-2" data-target="12" data-suffix="+" id="stat-2">0+</div>
+                <p class="text-[9px] uppercase tracking-[0.25em] text-gray-500 font-black">Aktívnych partnerov</p>
+            </div>
+            <div class="stat-item py-10 px-8 text-center sr-up" style="transition-delay: 0.2s">
+                <div class="stat-num text-4xl md:text-5xl font-black text-white mb-2" data-target="8" data-suffix=" okr." id="stat-3">0 okr.</div>
+                <p class="text-[9px] uppercase tracking-[0.25em] text-gray-500 font-black">Pokrytých okresov</p>
+            </div>
+            <div class="stat-item py-10 px-8 text-center sr-up" style="transition-delay: 0.3s">
+                <div class="stat-num text-4xl md:text-5xl font-black text-yellow-400 mb-2" data-target="100" data-suffix="%" id="stat-4">0%</div>
+                <p class="text-[9px] uppercase tracking-[0.25em] text-gray-500 font-black">Spokojnosť klientov</p>
+            </div>
+        </div>
+    </section>
+    <!-- ====== KTO SME ====== -->
+    <section class="py-32 border-t border-gray-500/20" aria-labelledby="kto-sme">
+        <div class="container mx-auto px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div class="space-y-4">
+                    <h2 id="kto-sme" class="text-yellow-400 syncopate font-bold uppercase text-xs tracking-widest">01. Kto sme</h2>
+                    <p class="font-bold text-lg leading-tight dark:text-white text-black">Elitný marketingový startup zameraný výhradne na remeselníkov a stavebné firmy.</p>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="text-yellow-400 syncopate font-bold uppercase text-xs tracking-widest">02. Čo robíme</h3>
+                    <p class="font-bold text-lg leading-tight dark:text-white text-black">Budujeme digitálne stroje, ktoré vám nosia dopyty, kým vy ste na stavbe.</p>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="text-yellow-400 syncopate font-bold uppercase text-xs tracking-widest">03. Náš cieľ</h3>
+                    <p class="font-bold text-lg leading-tight dark:text-white text-black">Dodať vám výsledky, na ktoré si unavené agentúry netrúfnu. Sme hladní po vašom úspechu.</p>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="text-yellow-400 syncopate font-bold uppercase text-xs tracking-widest">04. Výsledok</h3>
+                    <p class="font-bold text-lg leading-tight dark:text-white text-black">Plný kalendár zákaziek, vyššia marža a absolútna dominancia v regióne.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== PRIEBEH SPOLUPRÁCE ====== -->
+    <section class="py-32 border-t border-gray-500/20" aria-labelledby="proces-heading">
+        <div class="container mx-auto px-8">
+            <div class="mb-20 text-center">
+                <p class="text-xs font-black text-yellow-400 uppercase tracking-[0.8em] mb-4">Priebeh spolupráce</p>
+                <h2 id="proces-heading" class="text-4xl md:text-5xl font-black syncopate italic uppercase dark:text-white text-black">Ako spustíme váš rast</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <article class="glass p-10 rounded-[40px] relative group overflow-hidden">
+                    <div class="text-6xl font-black text-yellow-400/10 absolute -right-4 -bottom-4 group-hover:text-yellow-400/20 transition-colors" aria-hidden="true">1</div>
+                    <h3 class="text-2xl font-bold italic mb-4 uppercase dark:text-white text-black">Analýza</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Vyhodnotíme váš trh a vašu konkurenciu. Nájdeme miesta, kde vám unikajú peniaze a dopyty.</p>
+                </article>
+                <article class="glass p-10 rounded-[40px] relative group overflow-hidden">
+                    <div class="text-6xl font-black text-yellow-400/10 absolute -right-4 -bottom-4 group-hover:text-yellow-400/20 transition-colors" aria-hidden="true">2</div>
+                    <h3 class="text-2xl font-bold italic mb-4 uppercase dark:text-white text-black">Výstavba</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Naprogramujeme predajný lievik, výkonnostný web a kampane cielené presne na ľudí, ktorí hľadajú vaše remeslo.</p>
+                </article>
+                <article class="glass p-10 rounded-[40px] relative group overflow-hidden">
+                    <div class="text-6xl font-black text-yellow-400/10 absolute -right-4 -bottom-4 group-hover:text-yellow-400/20 transition-colors" aria-hidden="true">3</div>
+                    <h3 class="text-2xl font-bold italic mb-4 uppercase dark:text-white text-black">Dominancia</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Spustíme systém. Vy začnete prijímať relevantné hovory a maily. My systém optimalizujeme pre maximálnu maržu.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== TAJNÉ ZBRANE ====== -->
+    <section class="py-32 border-t border-gray-500/20" aria-labelledby="zbrane-heading">
+        <div class="container mx-auto px-8">
+            <div class="mb-20 text-center">
+                <p class="text-xs font-black text-yellow-400 uppercase tracking-[0.8em] mb-4">Tajné zbrane</p>
+                <h2 id="zbrane-heading" class="text-4xl md:text-5xl font-black syncopate italic uppercase dark:text-white text-black">Viac než len dopyty</h2>
+                <p class="mt-6 text-gray-500 max-w-2xl mx-auto">Vyriešime nielen prísun klientov, ale aj chaos v komunikácii. Naše systémy pracujú za vás, keď vy pracujete na stavbe.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <article class="glass p-12 rounded-[40px] border-l-4 border-yellow-400 group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-4xl mb-6" aria-hidden="true">📱</div>
+                    <h3 class="text-2xl font-bold italic mb-4 uppercase dark:text-white text-black">Auto-SMS záchrana</h3>
+                    <p class="text-gray-500 leading-relaxed">Ste na streche alebo režete flexou? Ak nezdvihnete telefón novému klientovi, náš systém mu do 1 minúty automaticky pošle SMS: <em>"Dobrý deň, tu je majster. Momentálne pracujem a nemôžem zdvihnúť. Hneď ako to bude možné, volám vám späť. Zatiaľ mi napíšte, čo potrebujete."</em> <strong class="text-yellow-400">Zachránená zákazka.</strong></p>
+                </article>
+                <article class="glass p-12 rounded-[40px] border-l-4 border-yellow-400 group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-4xl mb-6" aria-hidden="true">💻</div>
+                    <h3 class="text-2xl font-bold italic mb-4 uppercase dark:text-white text-black">Digitálny dispečing</h3>
+                    <p class="text-gray-500 leading-relaxed">Koniec strateným číslam na zdrapoch papiera v dodávke. Vytvoríme vám jednoduchú, prehľadnú klientsku zónu (mini-CRM) priamo v mobile. Vidíte presne: <em>Nové dopyty ➔ V riešení ➔ Odoslaná ponuka ➔ Získaná zákazka.</em> <strong class="text-yellow-400">Absolútny poriadok.</strong></p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== MANIFEST ====== -->
+    <section class="py-32 border-t border-gray-500/20 bg-[#0a0a0a]" aria-labelledby="manifest-heading">
+        <div class="container mx-auto px-8 max-w-5xl">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <p class="text-xs font-black text-red-500 uppercase tracking-[0.8em] mb-4">Náš manifest</p>
+                    <h2 id="manifest-heading" class="text-4xl md:text-5xl font-black syncopate italic uppercase text-white mb-8">Prečo <span class="text-red-500">nenávidíme</span> bežné agentúry</h2>
+                    <p class="text-gray-400 leading-relaxed mb-6">
+                        Väčšina agentúr vám bude predávať "dosah", "budovanie značky", "lajky" a pekné obrázky na Facebook. Sú to metriky pre ich ego, z ktorých vy hypotéku nezaplatíte.
+                    </p>
+                    <p class="text-white leading-relaxed font-bold">
+                        My sme tento model zničili. Nás nezaujíma, koľko ľudí videlo váš príspevok. Nás zaujíma, koľko reálnych, platiacich klientov vám dnes zavolalo. Generujeme peniaze, nie lajky.
+                    </p>
+                </div>
+                <div class="glass p-10 rounded-[40px] border-l-4 border-red-500">
+                    <div class="flex justify-between items-center mb-6 border-b border-gray-500/20 pb-4">
+                        <span class="font-bold text-gray-500 uppercase text-xs">Bežná agentúra</span>
+                        <span class="text-red-500 font-bold text-right">Lajky a sľuby</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-black uppercase tracking-widest text-white text-lg">LeadBusters</span>
+                        <span class="text-yellow-400 font-black text-xl text-right">Dopyty a zisk</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ====== REFERENCIE / CASE STUDIES ====== -->
+    <section class="py-32 border-t border-gray-500/20 bg-[#050505]" aria-labelledby="referencie-heading">
+        <div class="container mx-auto px-8 max-w-6xl">
+            <div class="mb-20 text-center">
+                <p class="text-xs font-black text-yellow-400 uppercase tracking-[0.8em] mb-4">Čísla hovoria za seba</p>
+                <h2 id="referencie-heading" class="text-4xl md:text-5xl font-black syncopate italic uppercase text-white">Reálne výsledky.<br><span class="text-yellow-400">Reálni partneri.</span></h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+
+                <!-- Case 1 -->
+                <article class="case-card glass p-8 rounded-[32px] border border-white/5 hover:border-yellow-400/20 flex flex-col sr-up">
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="w-12 h-12 bg-yellow-400/10 rounded-2xl flex items-center justify-center text-2xl">🏠</div>
+                        <span class="result-pill">+640% dopytov</span>
+                    </div>
+                    <h3 class="text-xl font-black text-white uppercase italic mb-1">Pokrývačstvo Nitra</h3>
+                    <p class="text-[10px] uppercase text-gray-600 font-bold tracking-widest mb-5">Rodinná firma, 2 pracovníci</p>
+                    <div class="flex gap-4 mb-6">
+                        <div class="flex-1 bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-center">
+                            <div class="text-2xl font-black text-red-400 syncopate">2</div>
+                            <div class="text-[8px] text-gray-500 uppercase tracking-widest mt-1">dopyty / mes. predtým</div>
+                        </div>
+                        <div class="flex items-center text-gray-600 text-lg">→</div>
+                        <div class="flex-1 bg-green-500/10 border border-green-500/20 rounded-xl p-3 text-center">
+                            <div class="text-2xl font-black text-green-400 syncopate">15</div>
+                            <div class="text-[8px] text-gray-500 uppercase tracking-widest mt-1">dopyty / mes. teraz</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm leading-relaxed flex-1">"Mali sme dosť práce z odporúčaní, ale v zime bol vždy prepad. Teraz máme zákazky rezervované 3 mesiace dopredu aj v januári."</p>
+                    <div class="mt-5 pt-5 border-t border-white/5 flex justify-between items-center">
+                        <div class="text-[9px] uppercase text-gray-600 tracking-widest">Zákazky za 90 dní</div>
+                        <div class="text-yellow-400 font-black syncopate text-xl">67 400 €</div>
+                    </div>
+                </article>
+
+                <!-- Case 2 -->
+                <article class="case-card glass p-8 rounded-[32px] border border-yellow-400/20 bg-yellow-400/5 flex flex-col sr-up" style="transition-delay: 0.12s">
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="w-12 h-12 bg-yellow-400/20 rounded-2xl flex items-center justify-center text-2xl">🔨</div>
+                        <span class="result-pill">+500% obrat</span>
+                    </div>
+                    <h3 class="text-xl font-black text-white uppercase italic mb-1">Rekonštrukcie Žilina</h3>
+                    <p class="text-[10px] uppercase text-gray-600 font-bold tracking-widest mb-5">Stavebná firma, 5 pracovníkov</p>
+                    <div class="flex gap-4 mb-6">
+                        <div class="flex-1 bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-center">
+                            <div class="text-2xl font-black text-red-400 syncopate">3</div>
+                            <div class="text-[8px] text-gray-500 uppercase tracking-widest mt-1">dopyty / mes. predtým</div>
+                        </div>
+                        <div class="flex items-center text-gray-600 text-lg">→</div>
+                        <div class="flex-1 bg-green-500/10 border border-green-500/20 rounded-xl p-3 text-center">
+                            <div class="text-2xl font-black text-green-400 syncopate">18</div>
+                            <div class="text-[8px] text-gray-500 uppercase tracking-widest mt-1">dopyty / mes. teraz</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed flex-1">"Prvé 3 dopyty sme dostali ešte počas testovacej fázy. Teraz si môžem vyberať koho vezmem — berie sa mi len to, čo sa mi oplatí."</p>
+                    <div class="mt-5 pt-5 border-t border-yellow-400/10 flex justify-between items-center">
+                        <div class="text-[9px] uppercase text-gray-600 tracking-widest">Zákazky za 90 dní</div>
+                        <div class="text-yellow-400 font-black syncopate text-xl">124 000 €</div>
+                    </div>
+                </article>
+
+                <!-- Case 3 -->
+                <article class="case-card glass p-8 rounded-[32px] border border-white/5 hover:border-yellow-400/20 flex flex-col sr-up" style="transition-delay: 0.24s">
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="w-12 h-12 bg-yellow-400/10 rounded-2xl flex items-center justify-center text-2xl">🪵</div>
+                        <span class="result-pill">+380% zákaziek</span>
+                    </div>
+                    <h3 class="text-xl font-black text-white uppercase italic mb-1">Stolárstvo Banská Bystrica</h3>
+                    <p class="text-[10px] uppercase text-gray-600 font-bold tracking-widest mb-5">Rodinná dielňa, 3 pracovníci</p>
+                    <div class="flex gap-4 mb-6">
+                        <div class="flex-1 bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-center">
+                            <div class="text-2xl font-black text-red-400 syncopate">4</div>
+                            <div class="text-[8px] text-gray-500 uppercase tracking-widest mt-1">dopyty / mes. predtým</div>
+                        </div>
+                        <div class="flex items-center text-gray-600 text-lg">→</div>
+                        <div class="flex-1 bg-green-500/10 border border-green-500/20 rounded-xl p-3 text-center">
+                            <div class="text-2xl font-black text-green-400 syncopate">19</div>
+                            <div class="text-[8px] text-gray-500 uppercase tracking-widest mt-1">dopyty / mes. teraz</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm leading-relaxed flex-1">"Konečne si môžem dovoliť odmietať zákazky, ktoré sa mi neoplatia. Ceny som zdvihol o 30% a stále nemôžem stíhať."</p>
+                    <div class="mt-5 pt-5 border-t border-white/5 flex justify-between items-center">
+                        <div class="text-[9px] uppercase text-gray-600 tracking-widest">Zákazky za 90 dní</div>
+                        <div class="text-yellow-400 font-black syncopate text-xl">89 500 €</div>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- Bottom disclaimer -->
+            <p class="text-center text-gray-700 text-[9px] uppercase tracking-widest mt-10 font-bold">
+                *Výsledky sú z prvých 90 dní spolupráce. Konkrétne výsledky závisia od regiónu, odboru a sezónnosti.
+            </p>
+        </div>
+    </section>
+    <!-- ====== HOLOGRAFICKÝ VELÍN (MAPA) ====== -->
+    <section class="py-40 relative overflow-hidden dark:bg-[#030303] bg-gray-100 transition-colors duration-500" aria-labelledby="mapa-heading">
+        <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 50px 50px;" aria-hidden="true"></div>
+
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div class="space-y-8 relative z-20">
+                    <p class="text-xs font-black text-yellow-400 uppercase tracking-[0.8em]">Strategické pokrytie</p>
+                    <h2 id="mapa-heading" class="text-5xl md:text-7xl font-black syncopate italic uppercase leading-tight dark:text-white text-black">Holografický <br><span class="text-yellow-400">Velín.</span></h2>
+                    <p class="text-gray-500 text-xl font-light leading-relaxed">Plošná kobercová ofenzíva. Náš systém nemonitoruje len jedno mesto, skenuje celý trh. Dopyty doručujeme s chirurgickou presnosťou, priamo tam, kde pôsobíte. <br><strong class="text-white mt-4 block">Exkluzivita zaručená: Berieme len jedného partnera na remeslo a okres.</strong></p>
+
+                    <div class="glass p-6 rounded-3xl inline-block border-l-4 border-yellow-400 mt-8">
+                        <div class="flex items-center gap-4 mb-2">
+                            <span class="w-3 h-3 bg-red-500 rounded-full animate-ping" aria-hidden="true"></span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Live Status: Radar aktívny</span>
+                        </div>
+                        <div class="font-bold text-lg dark:text-white text-black font-mono">Detekovaných <span class="text-yellow-400">24+</span> nových stavieb</div>
+                    </div>
+                </div>
+
+                <div class="relative w-full aspect-square md:aspect-video flex items-center justify-center group mt-10 lg:mt-0">
+                    <div class="absolute w-[80%] h-[80%] bg-yellow-400/10 rounded-full blur-[100px] pointer-events-none" aria-hidden="true"></div>
+                    <!-- Inline event handlers presunuté do JS -->
+                    <div class="relative w-full h-full" id="map-3d" style="transform: perspective(1200px) rotateX(55deg) rotateZ(-15deg); transform-style: preserve-3d; transition: transform 0.7s ease-out;">
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-yellow-400/10 rounded-full" aria-hidden="true"></div>
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-yellow-400/20 rounded-full" aria-hidden="true"></div>
+                        <div class="absolute top-1/2 left-1/2 w-[600px] h-[600px] rounded-full mix-blend-screen pointer-events-none" style="transform: translate(-50%, -50%); animation: radar 4s linear infinite; background: conic-gradient(from 0deg, transparent 70%, rgba(250, 204, 21, 0.1) 80%, rgba(250, 204, 21, 0.5) 100%);" aria-hidden="true"></div>
+
+                        <svg viewBox="0 0 800 400" class="w-full h-auto drop-shadow-[0_20px_30px_rgba(250,204,21,0.2)] overflow-visible absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" aria-label="Mapa pokrytia Slovensko" role="img">
+                            <path class="fill-[#0a0a0a]/90 stroke-yellow-400 stroke-[3] backdrop-blur-md" d="M760,210 L730,190 L700,220 L660,200 L630,240 L580,220 L530,250 L480,230 L430,260 L380,220 L330,240 L280,210 L230,250 L180,220 L130,240 L80,200 L30,220 L10,170 L40,140 L90,150 L140,110 L190,140 L240,100 L290,130 L340,90 L390,110 L440,80 L490,100 L540,70 L590,100 L640,80 L690,110 L740,90 L770,140 Z"/>
+                            <g style="transform: translate(120px, 220px);"><circle r="20" class="fill-red-500/20 animate-ping"/><circle r="6" class="fill-red-500 shadow-[0_0_10px_#EF4444]"/><g style="transform: rotateX(-55deg) translate(-10px, -30px);"><rect x="-30" y="-10" width="80" height="30" rx="4" class="fill-black/90 stroke-red-500/50 stroke-1"/><text x="10" y="2" class="fill-white font-bold text-[10px] uppercase" text-anchor="middle">BA</text><text x="10" y="14" class="fill-red-500 font-bold text-[8px] uppercase" text-anchor="middle">OBSADENÉ</text></g></g>
+                            <g style="transform: translate(250px, 190px);"><circle r="15" class="fill-green-500/20 animate-ping" style="animation-delay: 0.5s;"/><circle r="5" class="fill-green-500 shadow-[0_0_10px_#22C55E]"/><g style="transform: rotateX(-55deg) translate(-10px, -30px);"><rect x="-30" y="-10" width="70" height="30" rx="4" class="fill-black/90 stroke-green-500/50 stroke-1"/><text x="5" y="2" class="fill-white font-bold text-[10px] uppercase" text-anchor="middle">NR</text><text x="5" y="14" class="fill-green-400 font-bold text-[8px] uppercase" text-anchor="middle">VOĽNÉ</text></g></g>
+                            <g style="transform: translate(340px, 140px);"><circle r="25" class="fill-green-500/20 animate-ping" style="animation-delay: 1.2s;"/><circle r="6" class="fill-green-500 shadow-[0_0_10px_#22C55E]"/><g style="transform: rotateX(-55deg) translate(-10px, -30px);"><rect x="-30" y="-10" width="70" height="30" rx="4" class="fill-black/90 stroke-green-500/50 stroke-1"/><text x="5" y="2" class="fill-white font-bold text-[10px] uppercase" text-anchor="middle">ZA</text><text x="5" y="14" class="fill-green-400 font-bold text-[8px] uppercase" text-anchor="middle">VOĽNÉ</text></g></g>
+                            <g style="transform: translate(480px, 200px);"><circle r="15" class="fill-yellow-400/20 animate-ping" style="animation-delay: 0.8s;"/><circle r="4" class="fill-yellow-400"/><g style="transform: rotateX(-55deg) translate(-10px, -30px);"><rect x="-35" y="-10" width="80" height="30" rx="4" class="fill-black/90 stroke-yellow-400/50 stroke-1"/><text x="5" y="2" class="fill-white font-bold text-[10px] uppercase" text-anchor="middle">BB</text><text x="5" y="14" class="fill-yellow-400 font-bold text-[8px] uppercase" text-anchor="middle">JEDNÁME</text></g></g>
+                            <g style="transform: translate(680px, 180px);"><circle r="30" class="fill-red-500/20 animate-ping" style="animation-delay: 0.2s;"/><circle r="7" class="fill-red-500 shadow-[0_0_10px_#EF4444]"/><g style="transform: rotateX(-55deg) translate(-10px, -30px);"><rect x="-30" y="-10" width="80" height="30" rx="4" class="fill-black/90 stroke-red-500/50 stroke-1"/><text x="10" y="2" class="fill-white font-bold text-[10px] uppercase" text-anchor="middle">KE</text><text x="10" y="14" class="fill-red-500 font-bold text-[8px] uppercase" text-anchor="middle">OBSADENÉ</text></g></g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== LIVE LEAD INTERCEPTOR ====== -->
+    <section class="py-20 bg-[#050505] border-t border-gray-800 relative overflow-hidden font-mono" aria-labelledby="interceptor-heading">
+        <div class="container mx-auto px-8">
+            <div class="flex items-center gap-4 mb-10">
+                <div class="w-4 h-4 bg-green-500 rounded-sm animate-pulse" aria-hidden="true"></div>
+                <h2 id="interceptor-heading" class="text-xl md:text-2xl font-bold text-green-500 tracking-widest uppercase">Live Lead Interceptor</h2>
+                <div class="h-[1px] flex-grow bg-gradient-to-r from-green-500/50 to-transparent" aria-hidden="true"></div>
+            </div>
+
+            <div class="bg-black border border-green-500/30 rounded-xl p-4 md:p-8 h-[300px] overflow-hidden relative shadow-[0_0_30px_rgba(34,197,94,0.1)]" role="log" aria-live="polite" aria-label="Live zachytené dopyty">
+                <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent z-10 pointer-events-none" aria-hidden="true"></div>
+                <div id="matrix-container" class="space-y-3 flex flex-col justify-start"></div>
+            </div>
+            <p class="text-gray-600 text-[10px] uppercase tracking-widest mt-4">*Dáta sú anonymizované. Reálne zákazky smerované našim existujúcim klientom.</p>
+        </div>
+    </section>
+
+    <!-- ====== X-RAY SLIDER ====== -->
+    <section class="py-32 border-t border-gray-500/20 bg-[#020202]" aria-labelledby="xray-heading">
+        <div class="container mx-auto px-8 text-center">
+            <p class="text-xs font-black text-yellow-400 uppercase tracking-[0.8em] mb-4">Vizuálny rozdiel</p>
+            <h2 id="xray-heading" class="text-4xl md:text-5xl font-black syncopate italic uppercase text-white mb-16">Evolúcia dopytov</h2>
+
+            <div class="max-w-5xl mx-auto xray-container shadow-2xl" id="xray-container" role="img" aria-label="Porovnanie starého a nového webu - ťahajte posúvač">
+                <div class="xray-before" style="font-family: 'Times New Roman', Times, serif; padding: 40px;">
+                    <div class="w-full border-b-2 border-blue-700 pb-4 mb-6 flex justify-between items-end">
+                        <h3 class="text-3xl font-bold text-black m-0">STAVBY s.r.o.</h3>
+                        <div class="text-sm text-blue-700 underline">Domov | O nás | Cenník | Kontakt</div>
+                    </div>
+                    <h4 class="text-xl text-black font-bold mb-4">Vitajte na našej domovskej stránke</h4>
+                    <p class="text-black text-base max-w-md leading-relaxed mb-6 text-left">
+                        Sme firma s dlhoročnou tradíciou. Ponúkame stavebné práce a rekonštrukcie za výhodné ceny. Naša firma bola založená v roku 1995.
+                    </p>
+                    <div class="bg-gray-300 border border-gray-500 text-black px-4 py-1 text-sm cursor-pointer shadow-sm w-32 text-center">Napíšte nám</div>
+                    <div class="absolute bottom-10 left-10 text-[10px] uppercase font-bold text-red-600 tracking-widest border border-red-600 px-4 py-2 rounded bg-white z-10 shadow-lg">Výsledok: 0 dopytov / mesiac</div>
+                </div>
+
+                <div class="xray-after" id="xray-after">
+                    <div class="xray-after-content bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a] p-10 relative">
+                        <div class="w-full flex flex-col items-start z-10 mt-16 text-left">
+                            <div class="inline-block px-4 py-1 border border-yellow-400/30 text-yellow-400 text-[10px] uppercase font-bold tracking-widest rounded-full mb-6 bg-yellow-400/5">Líder v regióne</div>
+                            <h3 class="text-4xl md:text-6xl font-black text-white leading-[1.1] uppercase mb-6 syncopate">Nové strechy.<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Bez kompromisov.</span></h3>
+                            <button class="bg-yellow-400 text-black px-8 py-4 rounded-full font-black uppercase text-xs tracking-widest hover:bg-white transition shadow-xl">Vyžiadať ponuku</button>
+                        </div>
+                        <div class="absolute bottom-10 right-10 text-[10px] uppercase font-black text-green-400 tracking-widest border border-green-400 px-4 py-2 rounded bg-green-400/10 z-10 shadow-lg">Výsledok: 10+ dopytov / týždeň</div>
+                    </div>
+                </div>
+
+                <div class="xray-handle" id="xray-handle">
+                    <div class="xray-handle-button" aria-hidden="true">↔</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== LEAD-LEAK SCANNER ====== -->
+    <section class="py-32 border-t border-gray-500/20 bg-[#050505] relative overflow-hidden" id="scanner-section" aria-labelledby="scanner-heading">
+        <div class="container mx-auto px-8 max-w-4xl relative z-10">
+            <div class="text-center mb-12">
+                <p class="text-xs font-black text-red-500 uppercase tracking-[0.8em] mb-4 animate-pulse">Diagnostika systému</p>
+                <h2 id="scanner-heading" class="text-4xl md:text-5xl font-black syncopate italic uppercase text-white mb-6">Zistite, koľko peňazí <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-800">práve strácate</span></h2>
+            </div>
+
+            <div class="bg-[#0a0a0a] border border-gray-800 rounded-xl overflow-hidden shadow-[0_0_50px_rgba(255,0,0,0.1)]">
+                <div class="bg-[#111] border-b border-gray-800 px-4 py-3 flex items-center gap-2" aria-hidden="true">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span class="ml-4 text-[10px] text-gray-500 font-mono uppercase tracking-widest">LeadBusters_Audit.exe</span>
+                </div>
+                <div class="p-6 md:p-10">
+                    <div class="flex gap-4 mb-8" id="scan-input-area">
+                        <span class="text-green-500 font-mono text-lg mt-3" aria-hidden="true">></span>
+                        <label for="scan-url" class="sr-only">URL vašej stránky</label>
+                        <input type="url" id="scan-url" placeholder="www.vasastranka.sk" autocomplete="url"
+                            class="w-full bg-transparent border-b border-gray-700 py-3 text-white font-mono text-lg outline-none focus:border-green-500 transition placeholder:text-gray-700">
+                        <button id="start-scan-btn" class="bg-white text-black px-8 py-3 rounded-md font-bold uppercase tracking-widest text-xs hover:bg-green-500 hover:text-white transition-colors">Skenovať</button>
+                    </div>
+                    <div id="terminal-output" class="font-mono text-sm leading-relaxed hidden min-h-[200px]" aria-live="polite"></div>
+                    <div id="scan-result" class="hidden mt-8 p-6 border border-red-500/30 bg-red-500/5 rounded-lg text-center animate-[pulse_2s_ease-in-out_infinite]" role="alert">
+                        <h3 class="text-red-500 font-black uppercase text-xl mb-2">⚠ Kritický únik detekovaný</h3>
+                        <a href="#kontakt" class="magnetic inline-block bg-red-600 text-white px-8 py-4 rounded-full font-black uppercase tracking-widest text-[10px] mt-4 shadow-[0_0_20px_rgba(220,38,38,0.4)]">Zastaviť krvácanie peňazí</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== 5 DOPYTOV ZADARMO ====== -->
+    <section class="py-20 bg-[#CC0000] text-white relative overflow-hidden border-y-4 border-yellow-400 z-40 shadow-[0_0_100px_rgba(204,0,0,0.4)]" aria-labelledby="ponuka-heading">
+        <div class="container mx-auto px-8 relative z-10 text-center max-w-4xl">
+            <div class="inline-block bg-black text-yellow-400 px-6 py-2 rounded-full text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mb-8 border border-yellow-400/50 shadow-[0_0_20px_rgba(250,204,21,0.5)] animate-pulse">⚠️ Výzva pre 2 odvážne firmy</div>
+            <h2 id="ponuka-heading" class="text-4xl md:text-6xl font-black syncopate uppercase italic mb-6 drop-shadow-2xl tracking-tighter">Prvých 5 dopytov <br><span class="text-black">ZADARMO.</span></h2>
+            <p class="text-lg md:text-xl font-bold mb-12 opacity-95 max-w-2xl mx-auto leading-relaxed">Nekupujte mačku vo vreci. My vám na naše náklady privedieme prvých 5 reálnych záujemcov. Ak z nich nezarobíte, rozídeme sa a nezaplatíte nám ani cent. <span class="bg-black text-white px-2 py-1 italic">100% rizika berieme na seba.</span></p>
+            <a href="#kontakt" class="magnetic inline-block bg-black text-yellow-400 px-10 py-6 rounded-full font-black uppercase tracking-widest text-xs md:text-sm hover:bg-white hover:text-black transition-all shadow-[0_20px_40px_rgba(0,0,0,0.5)] transform hover:scale-105">Chcem 5 dopytov zadarmo 🔥</a>
+        </div>
+    </section>
+
+    <!-- ====== PROFIT SIMULATOR ====== -->
+    <section class="py-40 dark:bg-[#080808] bg-white border-y border-gray-500/20 transition-colors duration-500 relative overflow-hidden" aria-labelledby="simulator-heading">
+        <div id="sim-glow" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-yellow-400/5 rounded-full blur-[150px] pointer-events-none transition-all duration-500" aria-hidden="true"></div>
+
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="max-w-5xl mx-auto glass p-12 md:p-24 rounded-[60px] relative overflow-hidden border border-yellow-400/20 shadow-[0_0_50px_rgba(250,204,21,0.05)]">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <p class="text-xs font-black text-yellow-400 uppercase tracking-[0.8em] mb-2">Výpočet ROI</p>
+                        <h2 id="simulator-heading" class="text-3xl font-black syncopate italic uppercase mb-12 dark:text-white text-black">Profit Simulator</h2>
+
+                        <div class="space-y-12">
+                            <div class="relative group">
+                                <div class="flex justify-between mb-4 uppercase text-[10px] font-bold tracking-widest text-gray-500 group-hover:text-yellow-400 transition-colors">
+                                    <label for="orderValue">Priemerná hodnota zákazky</label>
+                                    <span class="dark:text-white text-black bg-gray-800/50 px-3 py-1 rounded-md" id="val1">2 000 €</span>
+                                </div>
+                                <input type="range" id="orderValue" min="500" max="10000" step="100" value="2000" class="sim-slider" aria-label="Priemerná hodnota zákazky">
+                            </div>
+                            <div class="relative group">
+                                <div class="flex justify-between mb-4 uppercase text-[10px] font-bold tracking-widest text-gray-500 group-hover:text-yellow-400 transition-colors">
+                                    <label for="leadsCount">Nové dopyty mesačne</label>
+                                    <span class="dark:text-white text-black bg-gray-800/50 px-3 py-1 rounded-md" id="val2">10</span>
+                                </div>
+                                <input type="range" id="leadsCount" min="1" max="50" step="1" value="10" class="sim-slider" aria-label="Počet nových dopytov mesačne">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative bg-gradient-to-br from-[#0a0a0a] to-[#111] p-10 rounded-[40px] border border-gray-800 text-center flex flex-col justify-center items-center h-full shadow-2xl">
+                        <div class="absolute top-0 w-full h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent opacity-50" aria-hidden="true"></div>
+                        <p class="text-gray-500 uppercase text-[10px] font-black tracking-[0.4em] mb-4">Potenciálny mesačný obrat</p>
+                        <div class="text-5xl md:text-7xl font-black syncopate text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-600 italic tracking-tighter mb-8" id="result" aria-live="polite">20 000 €</div>
+                        <div class="w-full border-t border-gray-800 pt-6 mt-auto">
+                            <p class="text-gray-600 uppercase text-[9px] font-bold tracking-widest mb-2">Ročná projekcia (×12)</p>
+                            <div class="text-2xl font-bold text-gray-300 font-mono" id="result-rok" aria-live="polite">240 000 €</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== CENNÍK ====== -->
+    <section class="py-32 border-t border-gray-500/20" aria-labelledby="cenik-heading">
+        <div class="container mx-auto px-8">
+            <div class="text-center mb-20">
+                <p class="text-xs font-black text-yellow-400 uppercase tracking-[0.8em] mb-4">Investícia do rastu</p>
+                <h2 id="cenik-heading" class="text-4xl md:text-5xl font-black syncopate italic uppercase dark:text-white text-black">Transparentné podmienky</h2>
+            </div>
+            <div class="grid lg:grid-cols-3 gap-8 items-center">
+                <article class="glass p-10 rounded-[40px] text-center dark:text-white text-black">
+                    <h3 class="text-xl font-bold uppercase tracking-widest mb-2">Audit & Stratégia</h3>
+                    <p class="text-gray-500 text-sm mb-8 h-12">Zistite presne, kde vám na trhu unikajú peniaze.</p>
+                    <div class="text-4xl font-black syncopate italic mb-8">Zadarmo*</div>
+                    <ul class="text-left space-y-4 text-sm font-bold opacity-80 mb-10" aria-label="Čo je zahrnuté">
+                        <li class="flex items-center gap-3"><span class="text-yellow-400" aria-hidden="true">✓</span> Analýza vášho webu</li>
+                        <li class="flex items-center gap-3"><span class="text-yellow-400" aria-hidden="true">✓</span> Analýza konkurencie</li>
+                        <li class="flex items-center gap-3"><span class="text-yellow-400" aria-hidden="true">✓</span> Odhad dopytov v regióne</li>
+                    </ul>
+                    <a href="#kontakt" class="block w-full border border-gray-500/30 py-4 rounded-full font-bold uppercase tracking-widest text-[10px] hover:bg-yellow-400 hover:text-black hover:border-yellow-400 transition-all">Získať audit</a>
+                    <p class="text-[9px] text-gray-500 mt-4">*Zadarmo v rámci úvodnej konzultácie</p>
+                </article>
+
+                <article class="glass p-10 rounded-[40px] text-center border-yellow-400/50 shadow-[0_0_40px_rgba(250,204,21,0.15)] relative transform lg:scale-105 bg-yellow-400/5 dark:bg-yellow-400/5 dark:text-white text-black">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-yellow-400 text-black px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Štartovací balík</div>
+                    <h3 class="text-xl font-bold uppercase tracking-widest mb-2">Digitálny Stroj</h3>
+                    <p class="text-gray-500 text-sm mb-8 h-12">Kompletné postavenie systému na generovanie zisku.</p>
+                    <div class="text-4xl font-black syncopate italic mb-2">1 490 €</div>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-8">Jednorazovo</p>
+                    <ul class="text-left space-y-4 text-sm font-bold opacity-80 mb-10" aria-label="Čo je zahrnuté">
+                        <li class="flex items-center gap-3"><span class="text-yellow-400" aria-hidden="true">✓</span> Prémiový výkonnostný web</li>
+                        <li class="flex items-center gap-3"><span class="text-yellow-400" aria-hidden="true">✓</span> Psychológia predaja (Copywriting)</li>
+                        <li class="flex items-center gap-3"><span class="text-yellow-400" aria-hidden="true">✓</span> Nastavenie Google Ads / Meta</li>
+                        <li class="flex items-center gap-3"><span class="text-yellow-400" aria-hidden="true">✓</span> Formuláre a automatizácie</li>
+                    </ul>
+                    <a href="#kontakt" class="block w-full bg-yellow-400 text-black py-4 rounded-full font-black uppercase tracking-widest text-[10px] hover:bg-white transition-all shadow-xl">Vybudovať systém</a>
+                </article>
+
+                <article class="glass p-10 rounded-[40px] text-center dark:text-white text-black">
+                    <h3 class="text-xl font-bold uppercase tracking-widest mb-2">Total Dominance</h3>
+                    <p class="text-gray-500 text-sm mb-8 h-12">Aktívna správa a garantovaný prísun dopytov mesačne.</p>
+                    <div class="text-4xl font-black syncopate italic mb-2">490 €</div>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-8">Mesačne + Rozpočet na reklamu</p>
+                    <ul class="text-left space-y-4 text-sm font-bold opacity-80 mb-10" aria-label="Čo je zahrnuté">
+                        <li class="flex items-center gap-3"><span class="text-yellow-400" aria-hidden="true">✓</span> Správa reklamných kampaní</li>
+                        <li class="flex items-center gap-3"><span class="text-yellow-400" aria-hidden="true">✓</span> A/B Testovanie a ladenie</li>
+                        <li class="flex items-center gap-3"><span class="text-yellow-400" aria-hidden="true">✓</span> Exkluzivita na okres</li>
+                        <li class="flex items-center gap-3"><span class="text-yellow-400" aria-hidden="true">✓</span> Ochrana Zero-Risk garanciou</li>
+                    </ul>
+                    <a href="#kontakt" class="block w-full border border-gray-500/30 py-4 rounded-full font-bold uppercase tracking-widest text-[10px] hover:bg-yellow-400 hover:text-black hover:border-yellow-400 transition-all">Spustiť spoluprácu</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ====== REFERENCIE / TESTIMONIALS ====== -->
+    <section class="py-32 border-t border-gray-500/20 bg-[#030303]" aria-labelledby="testimonials-heading">
+        <div class="container mx-auto px-8 max-w-6xl">
+            <div class="mb-16 text-center">
+                <p class="text-xs font-black text-yellow-400 uppercase tracking-[0.8em] mb-4">Hlasy partnerov</p>
+                <h2 id="testimonials-heading" class="text-4xl md:text-5xl font-black syncopate italic uppercase text-white">Čo hovoria<br><span class="text-yellow-400">naši majstri?</span></h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+
+                <article class="testimonial-card glass p-8 rounded-[32px] border border-white/5 flex flex-col sr-up">
+                    <div class="stars text-lg mb-4">★★★★★</div>
+                    <p class="text-white font-bold text-base leading-relaxed flex-1 mb-6">"Za prvý mesiac som mal viac hovorov od potenciálnych klientov ako za celý predošlý rok. Systém funguje presne tak, ako sľúbili."</p>
+                    <div class="flex items-center gap-3 pt-5 border-t border-white/5">
+                        <div class="w-10 h-10 rounded-full bg-yellow-400/20 flex items-center justify-center text-yellow-400 font-black text-sm shrink-0">MK</div>
+                        <div>
+                            <div class="text-white font-black text-sm">Martin K.</div>
+                            <div class="text-gray-500 text-[9px] uppercase tracking-widest">Pokrývač, Nitra</div>
+                        </div>
+                        <div class="ml-auto text-green-400 text-[9px] font-black uppercase tracking-widest">Overený</div>
+                    </div>
+                </article>
+
+                <article class="testimonial-card glass p-8 rounded-[32px] border border-yellow-400/20 bg-yellow-400/5 flex flex-col sr-up" style="transition-delay: 0.12s">
+                    <div class="stars text-lg mb-4">★★★★★</div>
+                    <p class="text-white font-bold text-base leading-relaxed flex-1 mb-6">"Skeptický som bol. Ale po tom, ako dostali dopyty počas prvého týždňa — všetky reálne, z môjho okresu — som prestal pochybovať."</p>
+                    <div class="flex items-center gap-3 pt-5 border-t border-yellow-400/10">
+                        <div class="w-10 h-10 rounded-full bg-yellow-400/20 flex items-center justify-center text-yellow-400 font-black text-sm shrink-0">PH</div>
+                        <div>
+                            <div class="text-white font-black text-sm">Peter H.</div>
+                            <div class="text-gray-500 text-[9px] uppercase tracking-widest">Rekonštrukcie, Žilina</div>
+                        </div>
+                        <div class="ml-auto text-green-400 text-[9px] font-black uppercase tracking-widest">Overený</div>
+                    </div>
+                </article>
+
+                <article class="testimonial-card glass p-8 rounded-[32px] border border-white/5 flex flex-col sr-up" style="transition-delay: 0.24s">
+                    <div class="stars text-lg mb-4">★★★★★</div>
+                    <p class="text-white font-bold text-base leading-relaxed flex-1 mb-6">"Tie auto-SMS sú geniálne. Klient mi napísal že bol prekvapený, že som mu odpovedal tak rýchlo — pritom som bol na lešení."</p>
+                    <div class="flex items-center gap-3 pt-5 border-t border-white/5">
+                        <div class="w-10 h-10 rounded-full bg-yellow-400/20 flex items-center justify-center text-yellow-400 font-black text-sm shrink-0">LV</div>
+                        <div>
+                            <div class="text-white font-black text-sm">Lukáš V.</div>
+                            <div class="text-gray-500 text-[9px] uppercase tracking-widest">Stolár, Banská Bystrica</div>
+                        </div>
+                        <div class="ml-auto text-green-400 text-[9px] font-black uppercase tracking-widest">Overený</div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+    <!-- ====== ZERO-RISK ZÁRUKA ====== -->
+    <section class="py-32 bg-yellow-400 text-black" aria-labelledby="zaruka-heading">
+        <div class="container mx-auto px-8 text-center max-w-4xl">
+            <p class="text-xs font-black uppercase tracking-[0.8em] mb-8 text-black/50">Naša záruka</p>
+            <h2 id="zaruka-heading" class="text-5xl md:text-7xl font-black syncopate italic uppercase mb-10">Zero-Risk <br>Protokol.</h2>
+            <blockquote class="text-xl md:text-2xl font-bold leading-relaxed opacity-90 mb-12">
+                "Ak náš systém do 30 dní nevygeneruje relevantné dopyty vo vašom regióne, pracujeme ďalší mesiac zadarmo, alebo vám vraciame poplatok za správu."
+            </blockquote>
+            <p class="text-xs font-black uppercase tracking-widest opacity-60">Sme platení za váš rast, nie za sľuby.</p>
+        </div>
+    </section>
+
+    <!-- ====== PODMIENKY PRIJATIA ====== -->
+    <section class="py-32 border-t border-gray-500/20 bg-[#0a0a0a]" aria-labelledby="podmienky-heading">
+        <div class="container mx-auto px-8 max-w-5xl">
+            <div class="text-center mb-16">
+                <p class="text-xs font-black text-yellow-400 uppercase tracking-[0.8em] mb-4">Prísne sitko</p>
+                <h2 id="podmienky-heading" class="text-4xl md:text-5xl font-black syncopate italic uppercase text-white mb-6">Podmienky <span class="text-red-500">prijatia</span></h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">Náš systém negeneruje dopyty pre každého. Aby sme mohli garantovať výsledky (a náš Zero-Risk protokol), spolupracujeme len s firmami, ktoré spĺňajú tieto 4 kritériá.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <article class="glass p-8 rounded-[40px] border-l-4 border-yellow-400">
+                    <h3 class="text-xl font-bold uppercase italic mb-4 text-white">01. Zvládate nápor</h3>
+                    <p class="text-gray-500">Musíte mať kapacity na spracovanie minimálne 3 až 5 nových veľkých zákaziek mesačne. Ak ste už teraz vyťažení na 100 % a nechcete rásť, tento systém vás zahltí.</p>
+                </article>
+                <article class="glass p-8 rounded-[40px] border-l-4 border-yellow-400">
+                    <h3 class="text-xl font-bold uppercase italic mb-4 text-white">02. Špičková kvalita práce</h3>
+                    <p class="text-gray-500">Budujeme vám meno lídra v regióne. To znamená, že za vami musí stáť poctivé remeslo. Žiadne odfláknuté fušky. Reklamácie ničia váš aj náš algoritmus.</p>
+                </article>
+                <article class="glass p-8 rounded-[40px] border-l-4 border-yellow-400">
+                    <h3 class="text-xl font-bold uppercase italic mb-4 text-white">03. Blesková komunikácia</h3>
+                    <p class="text-gray-500">Keď vám náš systém pošle horúci dopyt, očakávame, že sa klientovi ozvete do 24 hodín (naše auto-SMS vám s tým pomôžu). Peniaze milujú rýchlosť.</p>
+                </article>
+                <article class="glass p-8 rounded-[40px] border-l-4 border-red-500 bg-red-500/5">
+                    <h3 class="text-xl font-bold uppercase italic mb-4 text-red-500">04. Rozhodnosť</h3>
+                    <p class="text-gray-400">Hľadáme partnerov, nie špekulantov. Náš čas a kód sú drahé. Zastupujeme len jedného zhotoviteľa na okres. Kto prvý podpíše, ten berie trh. Bez výnimiek.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ====== FAQ ====== -->
+    <section class="py-32 border-t border-gray-500/20 bg-[#080808]" aria-labelledby="faq-heading">
+        <div class="container mx-auto px-8 max-w-3xl">
+            <div class="mb-16 text-center">
+                <p class="text-xs font-black text-yellow-400 uppercase tracking-[0.8em] mb-4">Máte otázky?</p>
+                <h2 id="faq-heading" class="text-4xl md:text-5xl font-black syncopate italic uppercase text-white">Najčastejšie<br><span class="text-yellow-400">otázky.</span></h2>
+            </div>
+
+            <div class="space-y-0" id="faq-list" role="list">
+
+                <div class="faq-item py-6" role="listitem">
+                    <button class="faq-question w-full flex items-center justify-between gap-4 text-left" aria-expanded="false">
+                        <span class="text-white font-bold text-lg">Ako dlho trvá, kým uvidím prvé výsledky?</span>
+                        <span class="faq-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-gray-400 leading-relaxed pt-4 pr-10">Prvé dopyty prichádzajú väčšinou do 7–14 dní od spustenia. Závisí od regiónu, odboru a sezóny. Preto máme testovací balík — vy neplatíte, kým neuvidíte výsledky na vlastné oči.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item py-6" role="listitem">
+                    <button class="faq-question w-full flex items-center justify-between gap-4 text-left" aria-expanded="false">
+                        <span class="text-white font-bold text-lg">Čo ak nemám vlastný web?</span>
+                        <span class="faq-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-gray-400 leading-relaxed pt-4 pr-10">Vôbec to nevadí — v balíku Digitálny Stroj stavíme nový výkonnostný web od základov. Náš web je navrhnutý tak, aby predával 24/7, nie aby bol len vizitka.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item py-6" role="listitem">
+                    <button class="faq-question w-full flex items-center justify-between gap-4 text-left" aria-expanded="false">
+                        <span class="text-white font-bold text-lg">Koľko zaplatím celkovo za reklamu?</span>
+                        <span class="faq-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-gray-400 leading-relaxed pt-4 pr-10">Okrem nášho poplatku (490 € / mes.) budete platiť priamo Google alebo Meta za samotnú reklamu. Odporúčame štartovací rozpočet 200–400 € / mes. Tento rozpočet kontrolujete vy — nie my.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item py-6" role="listitem">
+                    <button class="faq-question w-full flex items-center justify-between gap-4 text-left" aria-expanded="false">
+                        <span class="text-white font-bold text-lg">Čo presne znamená "exkluzivita na okres"?</span>
+                        <span class="faq-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-gray-400 leading-relaxed pt-4 pr-10">Keď s vami začneme spolupracovať, nezačneme pracovať s iným pokrývačom, murár­om ani stolár­om vo vašom okrese. Trhová dominancia je vaša — nie je to marketingový sľub, je to náš obchodný model.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item py-6" role="listitem">
+                    <button class="faq-question w-full flex items-center justify-between gap-4 text-left" aria-expanded="false">
+                        <span class="text-white font-bold text-lg">Čo ak mi systém nefunguje?</span>
+                        <span class="faq-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-gray-400 leading-relaxed pt-4 pr-10">Máme Zero-Risk protokol: ak do 30 dní nevygenerujeme relevantné dopyty, ďalší mesiac správy robíme zadarmo — alebo vrátime poplatok za správu. Žiadne hviezdy, len čistá zodpovednosť za výsledky.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item py-6" role="listitem">
+                    <button class="faq-question w-full flex items-center justify-between gap-4 text-left" aria-expanded="false">
+                        <span class="text-white font-bold text-lg">Môžem skončiť kedykoľvek?</span>
+                        <span class="faq-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-gray-400 leading-relaxed pt-4 pr-10">Mesačná správa je na mesačnej báze — bez záväzkov a bez dlhých zmlúv. Ak sa rozhodnete odísť, stačí mesačná výpoveď. Web a všetky kampane zostávajú vaše. Nestúpame na plynu, ak nechcete.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- ====== KONTAKT / KVÍZ ====== -->
+    <section id="kontakt" class="py-40 px-8 relative z-50" aria-labelledby="kontakt-heading">
+        <div class="max-w-5xl mx-auto glass p-12 md:p-24 rounded-[80px] border border-yellow-400/20 shadow-2xl">
+            <div class="text-center mb-16">
+                <h2 id="kontakt-heading" class="text-4xl md:text-6xl font-black syncopate italic mb-6 uppercase tracking-tighter dark:text-white text-black">Získajte nás <br>pre seba.</h2>
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.5em] mb-4">Buďte náš prvý úspešný partner.</p>
+                <a href="tel:+421908403692" class="text-yellow-400 font-black text-xl magnetic inline-block border border-yellow-400/30 px-6 py-2 rounded-full">Alebo volajte: 0908 403 692</a>
+            </div>
+
+            <form id="lb-quiz" action="https://hook.eu1.make.com/cass0hlh6fi5mfknv86tfeho1qgbit4d" method="POST" novalidate>
+                <input type="hidden" name="Odbor" id="quiz-odbor" value="">
+                <input type="hidden" name="Situacia" id="quiz-situacia" value="">
+
+                <!-- Krok 1 -->
+                <div id="step-1" class="quiz-step active w-full text-center py-6">
+                    <h3 class="text-2xl font-bold italic uppercase mb-8 dark:text-white text-black">1/3: V akom odbore pôsobíte?</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+                        <button type="button" onclick="nextStep(1, 'Stavba a Rekonštrukcia')" class="p-6 border border-gray-500/30 rounded-3xl hover:border-yellow-400 hover:text-yellow-400 transition font-bold dark:text-white text-black">Stavby & Rekonštrukcie</button>
+                        <button type="button" onclick="nextStep(1, 'Strechy a Izolácie')" class="p-6 border border-gray-500/30 rounded-3xl hover:border-yellow-400 hover:text-yellow-400 transition font-bold dark:text-white text-black">Strechy & Izolácie</button>
+                        <button type="button" onclick="nextStep(1, 'Nábytok a Stolárstvo')" class="p-6 border border-gray-500/30 rounded-3xl hover:border-yellow-400 hover:text-yellow-400 transition font-bold dark:text-white text-black">Nábytok & Stolárstvo</button>
+                        <button type="button" onclick="nextStep(1, 'Iné remeslo')" class="p-6 border border-gray-500/30 rounded-3xl hover:border-yellow-400 hover:text-yellow-400 transition font-bold dark:text-white text-black">Iné remeslo / Inštalácie</button>
+                    </div>
+                </div>
+
+                <!-- Krok 2 -->
+                <div id="step-2" class="quiz-step w-full text-center py-6">
+                    <h3 class="text-2xl font-bold italic uppercase mb-8 dark:text-white text-black">2/3: Čo je váš hlavný cieľ?</h3>
+                    <div class="grid gap-4 max-w-3xl mx-auto">
+                        <button type="button" onclick="nextStep(2, 'Potrebujem zaplniť kalendár prácou')" class="p-6 border border-gray-500/30 rounded-3xl hover:border-yellow-400 hover:text-yellow-400 transition font-bold dark:text-white text-black">Potrebujem zaplniť kalendár prácou</button>
+                        <button type="button" onclick="nextStep(2, 'Mám dosť práce, chcem luxusnejších klientov')" class="p-6 border border-gray-500/30 rounded-3xl hover:border-yellow-400 hover:text-yellow-400 transition font-bold dark:text-white text-black">Mám dosť práce, chcem luxusnejších klientov</button>
+                    </div>
+                </div>
+
+                <!-- Krok 3 -->
+                <div id="step-3" class="quiz-step w-full py-4">
+                    <h3 class="text-xl font-bold italic uppercase mb-5 text-center dark:text-white text-black">3/3: Posledný krok k dominancii</h3>
+
+                    <!-- VIP Fast-Track — kompaktný horizontálny pruh -->
+                    <div class="glass p-4 rounded-2xl flex flex-col sm:flex-row items-center gap-4 border-l-4 border-green-500 relative overflow-hidden group mb-4 max-w-3xl mx-auto">
+                        <div class="absolute inset-0 bg-green-500/5 group-hover:bg-green-500/10 transition-colors pointer-events-none" aria-hidden="true"></div>
+                        <div class="relative z-10 flex-1 text-center sm:text-left">
+                            <h4 class="text-green-500 font-black uppercase text-sm mb-0.5">⚡ VIP Fast-Track</h4>
+                            <p class="text-[9px] uppercase text-gray-400 font-bold tracking-widest">Preskočte formulár — spojte sa okamžite</p>
+                        </div>
+                        <a href="#" id="wa-fast-track" target="_blank" rel="noopener noreferrer"
+                           class="relative z-10 shrink-0 bg-[#25D366] text-white px-5 py-3 rounded-full font-black uppercase tracking-widest hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(37,211,102,0.3)] flex items-center gap-2 text-[10px] whitespace-nowrap">
+                            <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .018 5.396.015 12.03c0 2.12.554 4.189 1.605 6.035L0 24l6.105-1.602a11.83 11.83 0 005.937 1.598h.005c6.637 0 12.032-5.395 12.035-12.03a11.791 11.791 0 00-3.517-8.487"></path></svg>
+                            Napísať cez WhatsApp
+                        </a>
+                    </div>
+
+                    <p class="text-center text-gray-500 text-[9px] uppercase font-bold tracking-widest mb-4">— Alebo klasickou cestou —</p>
+
+                    <div class="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+                        <div class="glass p-6 rounded-[28px] flex flex-col justify-center">
+                            <label for="input-name" class="sr-only">Meno a Priezvisko</label>
+                            <input type="text" id="input-name" name="name" required autocomplete="name"
+                                class="w-full bg-transparent border-b py-2.5 text-base font-bold outline-none border-gray-500/30 focus:border-yellow-400 transition dark:text-white text-black mb-3"
+                                placeholder="Meno a Priezvisko">
+
+                            <label for="input-email" class="sr-only">Váš E-mail</label>
+                            <input type="email" id="input-email" name="email" required autocomplete="email"
+                                class="w-full bg-transparent border-b py-2.5 text-base font-bold outline-none border-gray-500/30 focus:border-yellow-400 transition dark:text-white text-black mb-3"
+                                placeholder="Váš E-mail">
+
+                            <label for="otazka" class="sr-only">V ktorom okrese pôsobíte?</label>
+                            <textarea id="otazka" name="Lokalita_a_Poznamka" rows="2"
+                                class="w-full bg-transparent border-b py-2.5 text-base font-bold outline-none border-gray-500/30 focus:border-yellow-400 transition dark:text-white text-black mb-5"
+                                placeholder="V ktorom okrese pôsobíte?"></textarea>
+
+                            <button type="submit" id="submit-btn" class="w-full bg-white text-black py-4 rounded-full font-black uppercase tracking-widest text-[10px] hover:bg-yellow-400 transition-all shadow-xl">Odoslať emailom</button>
+                        </div>
+
+                        <div class="glass p-6 rounded-[28px] flex flex-col justify-center border-yellow-400/30 relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-yellow-400/5 group-hover:bg-yellow-400/10 transition-colors pointer-events-none" aria-hidden="true"></div>
+                            <p class="text-[10px] uppercase text-yellow-400 font-bold mb-4 tracking-widest text-center relative z-10">Máte radšej Zoom?</p>
+                            <a href="https://calendly.com/info-leadbusters/30min" target="_blank" rel="noopener noreferrer"
+                               class="w-full bg-yellow-400 text-black py-8 rounded-2xl font-black uppercase italic tracking-tighter hover:scale-[1.02] transition-all shadow-[0_0_30px_rgba(250,204,21,0.2)] text-center flex flex-col items-center justify-center relative z-10"
+                               aria-label="Rezervovať hovor na Calendly">
+                                <span class="text-3xl mb-2" aria-hidden="true">📅</span>
+                                <span class="text-base">Rezervovať hovor</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="py-20 text-center border-t border-gray-500/20 pb-32">
+        <div class="flex flex-col items-center mb-10 gap-6">
+            <div>
+                <span class="text-gray-500 uppercase text-[8px] tracking-widest mb-1 block">Infolinka (Po – Pi: 4h/deň)</span>
+                <a href="tel:+421908403692" class="font-bold tracking-tighter text-2xl hover:text-yellow-400 transition dark:text-white text-black magnetic inline-block">0908 403 692</a>
+            </div>
+            <div>
+                <span class="text-gray-500 uppercase text-[8px] tracking-widest mb-1 block">Centrála</span>
+                <a href="mailto:info.leadbusters@gmail.com" class="font-bold tracking-tighter text-lg hover:text-yellow-400 transition dark:text-white text-black magnetic inline-block">info.leadbusters@gmail.com</a>
+            </div>
+        </div>
+        <div class="syncopate font-bold tracking-[1em] text-[10px] opacity-20 uppercase italic dark:text-white text-black">LeadBusters &copy; 2026</div>
+        <a href="gdpr.html" class="text-gray-500 hover:text-yellow-400 text-[9px] uppercase tracking-widest mt-6 inline-block transition">Ochrana osobných údajov</a>
+    </footer>
+
+    <!-- ====== COOKIE BANNER ====== -->
+    <div id="cookie-banner" role="dialog" aria-label="Cookie súhlas" aria-modal="false">
+        <div class="max-w-4xl mx-auto glass p-4 md:p-6 rounded-2xl md:rounded-full border border-yellow-400/20 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 bg-[#050505]/90">
+            <p class="text-gray-400 text-xs text-center md:text-left leading-relaxed">
+                Pre správne fungovanie tohto stroja na dopyty používame cookies. Žiadny spam, len čistá analytika pre váš rast.
+                <a href="gdpr.html" class="text-yellow-400 underline hover:text-white transition whitespace-nowrap">Viac info o ochrane dát.</a>
+            </p>
+            <div class="flex gap-4 shrink-0">
+                <button id="accept-cookies" class="bg-yellow-400 text-black px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(250,204,21,0.2)]">Súhlasím</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== EXIT POPUP ====== -->
+    <div id="exit-popup" class="fixed inset-0 z-[999999] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500" role="dialog" aria-modal="true" aria-labelledby="exit-popup-title">
+        <div class="absolute inset-0 bg-[#050505]/80 backdrop-blur-md" id="exit-popup-backdrop"></div>
+        <div class="relative w-full max-w-xl mx-4 glass p-10 md:p-16 rounded-[40px] shadow-[0_0_50px_rgba(250,204,21,0.15)] transform scale-95 transition-transform duration-500" id="exit-popup-content">
+            <button id="exit-popup-close" class="absolute top-6 right-8 text-gray-500 hover:text-yellow-400 text-3xl transition font-light magnetic" aria-label="Zavrieť popup">&times;</button>
+            <p class="text-xs font-black text-red-500 uppercase tracking-[0.8em] mb-4">Počkajte</p>
+            <h3 id="exit-popup-title" class="text-4xl md:text-5xl font-black syncopate italic uppercase dark:text-white text-black mb-6">Nechávate peniaze <br><span class="text-yellow-400">na stole.</span></h3>
+            <p class="text-gray-400 leading-relaxed mb-10">Neodchádzajte s prázdnymi rukami. Kým vy váhate, vaša konkurencia nespí. Kliknite na tlačidlo nižšie a rezervujte si <strong>15-minútovú bezplatnú stratégiu</strong>.</p>
+            <div class="flex flex-col gap-6">
+                <a href="https://calendly.com/info-leadbusters/30min" target="_blank" rel="noopener noreferrer" id="exit-popup-cta" class="magnetic w-full bg-yellow-400 text-black py-5 rounded-full font-black uppercase tracking-widest text-[10px] hover:bg-white transition-all shadow-[0_0_20px_rgba(250,204,21,0.3)] text-center block">Ukážte mi moje peniaze 📅</a>
+                <button id="exit-popup-dismiss" class="text-gray-600 text-[9px] uppercase font-bold tracking-widest hover:text-red-500 transition underline decoration-gray-800 underline-offset-4">Nie, radšej prenechám zákazky konkurencii</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ============================================================
+    // SMOOTH SCROLL (Lenis)
+    // ============================================================
+    const lenis = new Lenis();
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+
+    // ============================================================
+    // ZMENA NÁZVU KARTY PRI OPUSTENÍ WEBU
+    // ============================================================
+    const docTitle = document.title;
+    window.addEventListener('blur', () => { document.title = "⚠️ Konkurencia nespí..."; });
+    window.addEventListener('focus', () => { document.title = docTitle; });
+
+    // ============================================================
+    // SCROLL PROGRESS BAR (passive listener pre výkon)
+    // ============================================================
+    window.addEventListener('scroll', () => {
+        const scrollPx = document.documentElement.scrollTop;
+        const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        if (winHeightPx > 0) {
+            document.getElementById('scroll-progress').style.width = `${(scrollPx / winHeightPx) * 100}%`;
+        }
+    }, { passive: true });
+
+    // ============================================================
+    // AKTUÁLNY MESIAC
+    // ============================================================
+    const months = ["Január","Február","Marec","Apríl","Máj","Jún","Júl","August","September","Október","November","December"];
+    const currentMonthEl = document.getElementById('current-month');
+    if (currentMonthEl) currentMonthEl.innerText = months[new Date().getMonth()];
+
+    // ============================================================
+    // PRELOADER + ANIMÁCIA MONEY TICKERU PO NAČÍTANÍ
+    // ============================================================
+    gsap.registerPlugin(ScrollTrigger);
+
+    const loaderCounter = { value: 0 };
+    gsap.to(loaderCounter, {
+        value: 100,
+        duration: 1.5,
+        ease: "power2.inOut",
+        onUpdate() {
+            document.getElementById('loader-text').innerText = `${Math.floor(loaderCounter.value)}%`;
+        },
+        onComplete() {
+            gsap.to("#preloader", {
+                yPercent: -100,
+                duration: 1,
+                ease: "power4.inOut",
+                onComplete() {
+                    // BUG FIX: animujeme money ticker AŽ po skrytí preloadera
+                    const moneyTicker = document.getElementById('money-ticker');
+                    if (moneyTicker) {
+                        const tickerObj = { value: 0 };
+                        gsap.to(tickerObj, {
+                            value: 847500,
+                            duration: 2.5,
+                            ease: "power2.out",
+                            onUpdate() {
+                                moneyTicker.innerText = Math.floor(tickerObj.value).toLocaleString('sk-SK');
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+    // ============================================================
+    // GEO LOKALIZÁCIA (s timeoutom)
+    // ============================================================
+    const geoController = new AbortController();
+    const geoTimeout = setTimeout(() => geoController.abort(), 5000);
+
+    fetch('https://get.geojs.io/v1/ip/geo.json', { signal: geoController.signal })
+        .then(r => r.json())
+        .then(data => {
+            clearTimeout(geoTimeout);
+            document.getElementById('user-city').innerText = data?.city || "Váš región";
+        })
+        .catch(() => {
+            document.getElementById('user-city').innerText = "Váš región";
+        });
+
+    // ============================================================
+    // KVÍZ & WHATSAPP FAST-TRACK LOGIKA
+    // ============================================================
+    function nextStep(currentStep, answer) {
+        if (currentStep === 1) {
+            document.getElementById('quiz-odbor').value = answer;
+            document.getElementById('step-1').classList.remove('active');
+            setTimeout(() => document.getElementById('step-2').classList.add('active'), 200);
+        } else if (currentStep === 2) {
+            document.getElementById('quiz-situacia').value = answer;
+            const odbor = document.getElementById('quiz-odbor').value;
+            const waText = encodeURIComponent(`Zdravím LeadBusters. Robím ${odbor} a môj cieľ je: ${answer}. Je môj okres ešte voľný? Aké sú podmienky?`);
+            document.getElementById('wa-fast-track').href = `https://wa.me/421908403692?text=${waText}`;
+            document.getElementById('step-2').classList.remove('active');
+            setTimeout(() => document.getElementById('step-3').classList.add('active'), 200);
+        }
+    }
+
+    // ============================================================
+    // PROFIT SIMULATOR
+    // ============================================================
+    const orderVal = document.getElementById('orderValue');
+    const leadsCount = document.getElementById('leadsCount');
+    const resultEl = document.getElementById('result');
+    const resultRokEl = document.getElementById('result-rok');
+    const simGlow = document.getElementById('sim-glow');
+    let currentTotal = 20000;
+
+    function updateSliderFill(slider) {
+        const pct = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+        slider.style.background = `linear-gradient(to right, #FACC15 ${pct}%, #222 ${pct}%)`;
+    }
+
+    function updateCalc() {
+        const val1 = parseInt(orderVal.value);
+        const val2 = parseInt(leadsCount.value);
+        const total = val1 * val2;
+
+        document.getElementById('val1').innerText = val1.toLocaleString('sk-SK') + " €";
+        document.getElementById('val2').innerText = val2;
+        updateSliderFill(orderVal);
+        updateSliderFill(leadsCount);
+
+        gsap.to({ val: currentTotal }, {
+            val: total,
+            duration: 0.5,
+            ease: "power2.out",
+            onUpdate() {
+                resultEl.innerText = Math.round(this.targets()[0].val).toLocaleString('sk-SK') + " €";
+            }
+        });
+        resultRokEl.innerText = (total * 12).toLocaleString('sk-SK') + " €";
+        currentTotal = total;
+
+        if (simGlow) {
+            simGlow.style.backgroundColor = `rgba(250, 204, 21, ${Math.min(0.02 + (total / 500000) * 0.15, 0.2)})`;
+        }
+    }
+
+    if (orderVal && leadsCount) {
+        orderVal.addEventListener('input', updateCalc);
+        leadsCount.addEventListener('input', updateCalc);
+        updateSliderFill(orderVal);
+        updateSliderFill(leadsCount);
+    }
+
+    // ============================================================
+    // MATRIX ZACHYTENÝCH DOPYTOV
+    // BUG FIX: recursive setTimeout pre skutočne náhodné intervaly
+    // ============================================================
+    const matrixContainer = document.getElementById('matrix-container');
+    const firstNames = ["J. Kováč", "M. Novák", "P. Tóth", "L. Varga", "S. Horváth", "A. Baláž", "M. Rigo", "K. Molnár"];
+    const servicesMatrix = ["Zateplenie domu", "Rekonštrukcia bytového jadra", "Nová strecha", "Pokládka dlažby", "Vstavané skrine"];
+    const cities = ["BA", "NR", "ZA", "TT", "KE", "PO", "BB", "TN"];
+
+    function generateLeadLine() {
+        if (!matrixContainer) return;
+        const time = new Date().toLocaleTimeString('sk-SK', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const name = firstNames[Math.floor(Math.random() * firstNames.length)] + "***";
+        const service = servicesMatrix[Math.floor(Math.random() * servicesMatrix.length)];
+        const city = cities[Math.floor(Math.random() * cities.length)];
+        const budget = (Math.floor(Math.random() * 15) + 2) * 1000;
+
+        const line = document.createElement('div');
+        line.className = 'interceptor-line text-xs md:text-sm text-green-400 flex flex-col md:flex-row gap-1 md:gap-4 border-b border-green-900/30 pb-2';
+        // Bezpečné nastavenie - bez innerHTML s používateľskými dátami
+        line.innerHTML = `
+            <span class="text-green-600 opacity-70">[ZACHYTENÉ ${time}]</span>
+            <span class="text-white">-&gt; ${name} hľadá: <span class="text-yellow-400">${service}</span></span>
+            <span class="opacity-70">| Lok: ${city} | Rozpočet: ~${budget.toLocaleString('sk-SK')} €</span>
+            <span class="text-green-500 font-bold ml-auto hidden md:inline">-&gt; ODOSLANÉ KLIENTOVI</span>
+        `;
+        matrixContainer.prepend(line);
+        if (matrixContainer.children.length > 6) matrixContainer.lastChild.remove();
+
+        // BUG FIX: každý interval sa generuje nanovo = skutočná náhodnosť
+        setTimeout(generateLeadLine, Math.floor(Math.random() * 4000) + 3000);
+    }
+
+    // Prvé 3 riadky hneď po načítaní
+    generateLeadLine();
+    setTimeout(generateLeadLine, 1000);
+    setTimeout(generateLeadLine, 2000);
+
+    // ============================================================
+    // LIVE NOTIFIKÁCIA
+    // ============================================================
+    const towns = ["Košice", "Žilina", "Bratislava", "Poprad", "Trnava", "Nitra", "Zvolen"];
+    const servicesNotif = ["Tesárstvo", "Pokrývačstvo", "Stolárska dielňa", "Elektroinštalácie"];
+
+    function showNotif() {
+        const el = document.getElementById('live-notif');
+        if (!el) return;
+        const randTown = towns[Math.floor(Math.random() * towns.length)];
+        const randServ = servicesNotif[Math.floor(Math.random() * servicesNotif.length)];
+        document.getElementById('notif-text').innerText = `Práve teraz: ${randServ}, ${randTown}`;
+        el.classList.add('show');
+        setTimeout(() => el.classList.remove('show'), 4000);
+    }
+    setInterval(showNotif, 18000);
+
+    // ============================================================
+    // X-RAY SLIDER
+    // ============================================================
+    const xrayContainer = document.getElementById('xray-container');
+    const afterPanel = document.getElementById('xray-after');
+    const xrayHandle = document.getElementById('xray-handle');
+    let isDragging = false;
+
+    function updateXRay(clientX) {
+        if (!xrayContainer) return;
+        const rect = xrayContainer.getBoundingClientRect();
+        const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+        const pct = (x / rect.width) * 100;
+        afterPanel.style.width = `${pct}%`;
+        xrayHandle.style.left = `${pct}%`;
+    }
+
+    if (xrayHandle) {
+        xrayHandle.addEventListener('mousedown', () => { isDragging = true; });
+        window.addEventListener('mouseup', () => { isDragging = false; });
+        window.addEventListener('mousemove', (e) => { if (isDragging) updateXRay(e.clientX); });
+        xrayHandle.addEventListener('touchstart', () => { isDragging = true; }, { passive: true });
+        window.addEventListener('touchend', () => { isDragging = false; }, { passive: true });
+        window.addEventListener('touchmove', (e) => { if (isDragging) updateXRay(e.touches[0].clientX); }, { passive: true });
+    }
+
+    // ============================================================
+    // SCROLL REVEAL & FLOATING CTA
+    // ============================================================
+    document.querySelectorAll('.reveal').forEach((el) => {
+        ScrollTrigger.create({ trigger: el, start: "top 85%", onEnter: () => el.classList.add('active') });
+    });
+
+    const fCta = document.getElementById('floating-cta');
+    window.addEventListener('scroll', () => {
+        if (fCta) fCta.classList.toggle('visible', window.scrollY > 500);
+    }, { passive: true });
+
+    // ============================================================
+    // CUSTOM CURSOR (s will-change v CSS)
+    // ============================================================
+    const cur = document.getElementById('cursor');
+    const fol = document.getElementById('cursor-follower');
+
+    if (cur && window.matchMedia('(hover: hover)').matches) {
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cur, { x: e.clientX, y: e.clientY, duration: 0.1 });
+            gsap.to(fol, { x: e.clientX - 20, y: e.clientY - 20, duration: 0.3 });
+        });
+    }
+
+    // MAGNETIC EFFECT
+    document.querySelectorAll('.magnetic').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            gsap.to(btn, {
+                x: (e.clientX - rect.left - rect.width / 2) * 0.35,
+                y: (e.clientY - rect.top - rect.height / 2) * 0.35,
+                duration: 0.3
+            });
+            if (cur) cur.style.transform = 'scale(4)';
+        });
+        btn.addEventListener('mouseleave', () => {
+            gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+            if (cur) cur.style.transform = 'scale(1)';
+        });
+    });
+
+    // ============================================================
+    // 3D MAPA - mouse handlers presunuté z HTML do JS
+    // ============================================================
+    const map3d = document.getElementById('map-3d');
+    if (map3d) {
+        map3d.addEventListener('mousemove', () => {
+            map3d.style.transform = 'perspective(1200px) rotateX(50deg) rotateZ(-10deg)';
+        });
+        map3d.addEventListener('mouseleave', () => {
+            map3d.style.transform = 'perspective(1200px) rotateX(55deg) rotateZ(-15deg)';
+        });
+    }
+
+    // ============================================================
+    // GDPR COOKIES
+    // ============================================================
+    function loadTrackingScripts() {
+        const gaScript = document.createElement('script');
+        gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-P5MK2FZ9Y6";
+        gaScript.async = true;
+        document.head.appendChild(gaScript);
+        gaScript.onload = () => {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'G-P5MK2FZ9Y6', { anonymize_ip: true });
+        };
+    }
+
+    const cookieBanner = document.getElementById('cookie-banner');
+    const acceptCookiesBtn = document.getElementById('accept-cookies');
+
+    if (localStorage.getItem('lb_cookies_accepted') === 'true') {
+        loadTrackingScripts();
+    } else {
+        // BUG FIX: použijeme class namiesto inline style (konzistentné s CSS)
+        setTimeout(() => { if (cookieBanner) cookieBanner.classList.add('visible'); }, 2000);
+    }
+
+    if (acceptCookiesBtn) {
+        acceptCookiesBtn.addEventListener('click', () => {
+            localStorage.setItem('lb_cookies_accepted', 'true');
+            if (cookieBanner) cookieBanner.classList.remove('visible');
+            loadTrackingScripts();
+        });
+    }
+
+    // ============================================================
+    // EXIT INTENT POPUP
+    // ============================================================
+    let popupTriggered = false;
+    const exitPopup = document.getElementById('exit-popup');
+    const exitPopupContent = document.getElementById('exit-popup-content');
+
+    function showExitPopup() {
+        if (popupTriggered || !exitPopup) return;
+        popupTriggered = true;
+        exitPopup.classList.remove('pointer-events-none', 'opacity-0');
+        exitPopup.classList.add('opacity-100');
+        exitPopupContent.classList.remove('scale-95');
+        exitPopupContent.classList.add('scale-100');
+        exitPopup.setAttribute('aria-hidden', 'false');
+        // Focus prvý interaktívny element v popupe
+        const firstFocusable = exitPopup.querySelector('a, button');
+        if (firstFocusable) setTimeout(() => firstFocusable.focus(), 100);
+    }
+
+    function closeExitPopup() {
+        if (!exitPopup) return;
+        exitPopup.classList.remove('opacity-100');
+        exitPopup.classList.add('opacity-0', 'pointer-events-none');
+        exitPopupContent.classList.remove('scale-100');
+        exitPopupContent.classList.add('scale-95');
+        exitPopup.setAttribute('aria-hidden', 'true');
+    }
+
+    // Zatvorenie kliknutím na backdrop
+    document.getElementById('exit-popup-backdrop')?.addEventListener('click', closeExitPopup);
+    document.getElementById('exit-popup-close')?.addEventListener('click', closeExitPopup);
+    document.getElementById('exit-popup-dismiss')?.addEventListener('click', closeExitPopup);
+    document.getElementById('exit-popup-cta')?.addEventListener('click', closeExitPopup);
+
+    // Klávesnica - Escape zatvára popup
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && popupTriggered) closeExitPopup();
+    });
+
+    // Triggery pre exit popup
+    document.addEventListener('mouseleave', (e) => { if (e.clientY < 0) showExitPopup(); });
+
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+        if (window.scrollY < lastScrollY - 100 && window.scrollY > 1000) showExitPopup();
+        lastScrollY = window.scrollY;
+    }, { passive: true });
+
+    // ============================================================
+    // AJAX ODOSLANIE FORMULÁRA
+    // ============================================================
+    const form = document.getElementById('lb-quiz');
+    const submitBtn = document.getElementById('submit-btn');
+
+    if (form && submitBtn) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = "Odosielam dáta...";
+            submitBtn.disabled = true;
+            submitBtn.classList.add('animate-pulse');
+
+            fetch(form.action, {
+                method: form.method,
+                body: new FormData(form),
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = "dakujeme.html";
+                } else {
+                    throw new Error('Server error');
+                }
+            })
+            .catch(() => {
+                alert("Ups, niečo sa pokazilo. Skúste to znova alebo nás kontaktujte priamo.");
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('animate-pulse');
+            });
+        });
+    }
+
+    // ============================================================
+    // LEAD-LEAK SCANNER
+    // ============================================================
+    const scanBtn = document.getElementById('start-scan-btn');
+    if (scanBtn) {
+        scanBtn.addEventListener('click', async () => {
+            const scanUrlInput = document.getElementById('scan-url');
+            const terminalOutput = document.getElementById('terminal-output');
+            const scanResult = document.getElementById('scan-result');
+            const scanInputArea = document.getElementById('scan-input-area');
+
+            if (!scanUrlInput.value.trim()) {
+                scanUrlInput.focus();
+                scanUrlInput.placeholder = "⚠ Zadajte URL najprv!";
+                return;
+            }
+
+            scanInputArea.classList.add('hidden');
+            terminalOutput.classList.remove('hidden');
+
+            // Bezpečné zobrazenie URL (textContent, nie innerHTML)
+            const initDiv = document.createElement('div');
+            initDiv.className = 'text-yellow-400 mb-4';
+            initDiv.textContent = `Iniciujem hĺbkový sken pre: ${scanUrlInput.value}`;
+            terminalOutput.appendChild(initDiv);
+
+            const msgs = [
+                "[00:01] Pripájam sa k serveru...",
+                "[00:02] ÚSPECH: Spojenie nadviazané.",
+                "[00:03] Hľadám zachytávacie formuláre (Lead Magnets)...",
+                "[00:04] CHYBA: Web funguje ako vizitka, nefunguje ako predajca.",
+                "[00:05] Kompilujem finálny report..."
+            ];
+
+            const colors = ['text-gray-500', 'text-green-500', 'text-gray-500', 'text-red-500', 'text-gray-500'];
+
+            for (let i = 0; i < msgs.length; i++) {
+                await new Promise(r => setTimeout(r, 800));
+                const msgDiv = document.createElement('div');
+                msgDiv.className = colors[i];
+                msgDiv.textContent = msgs[i];
+                terminalOutput.appendChild(msgDiv);
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }
+
+            await new Promise(r => setTimeout(r, 1000));
+            scanResult.classList.remove('hidden');
+        });
+    }
+
+    // ============================================================
+    // MOBILE HAMBURGER MENU
+    // ============================================================
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    function openMobileMenu() {
+        hamburgerBtn.classList.add('open');
+        mobileMenu.classList.add('open');
+        hamburgerBtn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+        lenis.stop();
+    }
+    function closeMobileMenu() {
+        hamburgerBtn.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+        lenis.start();
+    }
+    hamburgerBtn?.addEventListener('click', () => {
+        mobileMenu.classList.contains('open') ? closeMobileMenu() : openMobileMenu();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMobileMenu();
+    });
+
+    // ============================================================
+    // ANIMATED STATS COUNTERS (IntersectionObserver)
+    // ============================================================
+    (function() {
+        const statEls = document.querySelectorAll('[data-target]');
+        const statObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const el = entry.target;
+                const target = parseInt(el.dataset.target);
+                const suffix = el.dataset.suffix || '';
+                const duration = 2000;
+                const start = performance.now();
+                function tick(now) {
+                    const progress = Math.min((now - start) / duration, 1);
+                    const ease = 1 - Math.pow(1 - progress, 3);
+                    const val = Math.round(ease * target);
+                    el.textContent = (target >= 10000 ? val.toLocaleString('sk-SK') : val) + suffix;
+                    if (progress < 1) requestAnimationFrame(tick);
+                }
+                requestAnimationFrame(tick);
+                statObs.unobserve(el);
+            });
+        }, { threshold: 0.3 });
+        statEls.forEach(el => statObs.observe(el));
+    })();
+
+    // ============================================================
+    // SCROLL REVEAL — .sr-up elements
+    // ============================================================
+    (function() {
+        const srEls = document.querySelectorAll('.sr-up');
+        const srObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    srObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+        srEls.forEach(el => srObs.observe(el));
+    })();
+
+    // ============================================================
+    // FAQ ACCORDION
+    // ============================================================
+    document.querySelectorAll('.faq-question').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const item = btn.closest('.faq-item');
+            const answer = item.querySelector('.faq-answer');
+            const isOpen = item.classList.contains('open');
+
+            // Close all
+            document.querySelectorAll('.faq-item.open').forEach(openItem => {
+                openItem.classList.remove('open');
+                openItem.querySelector('.faq-answer').classList.remove('open');
+                openItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+            });
+
+            // Open clicked if it was closed
+            if (!isOpen) {
+                item.classList.add('open');
+                answer.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+
+    </script>
+</body>
+</html>
