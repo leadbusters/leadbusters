@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="sk" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Missia Prijatá | LeadBusters</title>
+  <meta name="description" content="Vaša požiadavka bola prijatá. Spúšťame predbežnú analýzu trhu.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;700;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { accent: '#FACC15' } } }
+    }
+  </script>
+
+  <!-- Google Analytics (len po súhlase - zdedené z hlavnej stránky) -->
+  <script>
+    if (localStorage.getItem('lb_cookies_accepted') === 'true') {
+      const s = document.createElement('script');
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-P5MK2FZ9Y6';
+      s.async = true;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date()); gtag('config', 'G-P5MK2FZ9Y6', { anonymize_ip: true });
+    }
+  </script>
+
+  <style>
+    :root {
+      --accent: #FACC15;
+      --green: #22C55E;
+      --bg: #050505;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .grotesk { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.04em; }
+
+    /* Cursor */
+    #cursor {
+      width: 8px; height: 8px;
+      background: var(--accent); border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 100000;
+      mix-blend-mode: difference; will-change: transform;
+      transform: translate(-50%, -50%);
+    }
+    #cursor-follower {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--accent); border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 99999;
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      will-change: transform;
+      transform: translate(-50%, -50%);
+    }
+
+    @media (hover: none) {
+      body { cursor: auto; }
+      #cursor, #cursor-follower { display: none; }
+    }
+
+    /* Particle canvas */
+    #canvas-bg {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      z-index: 0; opacity: 0.35;
+      pointer-events: none;
+    }
+
+    /* Noise overlay */
+    .noise-overlay {
+      position: fixed; inset: 0; z-index: 1;
+      background: url('https://grainy-gradients.vercel.app/noise.svg');
+      opacity: 0.04; pointer-events: none;
+    }
+
+    /* Scanline */
+    .scanline {
+      position: fixed; top: -10%; left: 0; width: 100%; height: 3px;
+      background: linear-gradient(transparent, rgba(250,204,21,0.06), transparent);
+      z-index: 2; pointer-events: none;
+      animation: scan 6s linear infinite;
+    }
+    @keyframes scan { to { top: 110%; } }
+
+    /* Grid background lines */
+    .grid-bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(250,204,21,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(250,204,21,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* Glowing orbs */
+    .orb {
+      position: fixed; border-radius: 50%;
+      filter: blur(120px); pointer-events: none; z-index: 0;
+    }
+    .orb-1 { width: 500px; height: 500px; background: rgba(250,204,21,0.06); top: -10%; left: -10%; }
+    .orb-2 { width: 400px; height: 400px; background: rgba(34,197,94,0.04); bottom: -10%; right: -5%; }
+
+    /* Glass card */
+    .glass {
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .glass-accent {
+      background: rgba(250,204,21,0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(250,204,21,0.12);
+    }
+    .glass-green {
+      background: rgba(34,197,94,0.04);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(34,197,94,0.15);
+    }
+
+    /* Timeline steps */
+    .step { opacity: 0; transform: translateX(-30px); }
+    .step.done .step-icon {
+      background: var(--green);
+      border-color: var(--green);
+      box-shadow: 0 0 20px rgba(34,197,94,0.4);
+    }
+    .step.active .step-icon {
+      border-color: var(--accent);
+      box-shadow: 0 0 20px rgba(250,204,21,0.3);
+    }
+    .step-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 14px;
+      transition: all 0.5s ease;
+      background: rgba(255,255,255,0.03);
+    }
+    .step-connector {
+      width: 1px; height: 32px; background: rgba(255,255,255,0.06);
+      margin-left: 17px; flex-shrink: 0;
+    }
+    .step-connector.lit { background: linear-gradient(to bottom, var(--green), rgba(34,197,94,0.1)); }
+
+    /* Countdown digits */
+    .digit-block {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 12px 16px;
+      min-width: 64px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .digit-block::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(250,204,21,0.3), transparent);
+    }
+
+    /* Pulsing ring */
+    @keyframes ring-pulse {
+      0% { transform: scale(1); opacity: 0.6; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+    .ring {
+      position: absolute; inset: -6px; border-radius: 50%;
+      border: 1.5px solid var(--green);
+      animation: ring-pulse 2s ease-out infinite;
+    }
+    .ring-2 {
+      animation-delay: 0.7s;
+    }
+
+    /* Magnetic */
+    .mag { transition: box-shadow 0.3s ease; }
+
+    /* Confetti particle */
+    .confetti-piece {
+      position: fixed; width: 6px; height: 6px;
+      pointer-events: none; z-index: 9999;
+      border-radius: 1px;
+    }
+
+    /* Top bar */
+    .top-bar {
+      position: fixed; top: 0; left: 0; width: 100%;
+      height: 3px; background: var(--bg); z-index: 1000;
+    }
+    .top-bar-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--green), var(--accent));
+      transition: width 0.3s ease;
+    }
+
+    /* Territory badge */
+    .territory-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.2);
+      padding: 6px 16px; border-radius: 999px;
+    }
+
+    /* Focus */
+    :focus-visible { outline: 2px solid rgba(250,204,21,0.5); outline-offset: 3px; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .scanline, [class*="animate-"], .ring { animation: none !important; }
+      body { cursor: auto; }
+      #cursor, #cursor-follower { display: none; }
+    }
+
+    /* Main content */
+    #page-content { opacity: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- Cursors -->
+  <div id="cursor" aria-hidden="true"></div>
+  <div id="cursor-follower" aria-hidden="true"></div>
+
+  <!-- Skip link -->
+  <a href="#main-content" class="sr-only focus:not-sr-only fixed top-4 left-4 z-[200000] bg-yellow-400 text-black px-4 py-2 rounded font-bold text-sm">Preskočiť na obsah</a>
+
+  <!-- Top progress bar -->
+  <div class="top-bar" aria-hidden="true"><div class="top-bar-fill" id="top-bar-fill"></div></div>
+
+  <!-- Backgrounds -->
+  <canvas id="canvas-bg" aria-hidden="true"></canvas>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="noise-overlay" aria-hidden="true"></div>
+  <div class="scanline" aria-hidden="true"></div>
+
+  <!-- Page content -->
+  <div id="page-content" class="relative z-10 min-h-screen flex flex-col items-center justify-center px-5 py-24">
+
+    <main id="main-content" class="w-full max-w-5xl mx-auto">
+
+      <!-- Header brand link -->
+      <div class="flex justify-center mb-16">
+        <a href="index.html" class="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-500" aria-label="Späť na LeadBusters">
+          <svg class="h-7 w-auto fill-yellow-400" viewBox="0 0 100 100" aria-hidden="true">
+            <path d="M10,90 L10,60 L30,50 L30,80 Z" opacity="0.6"/>
+            <path d="M10,60 L30,50 L50,60 L30,70 Z"/>
+            <path d="M30,50 L30,20 L50,10 L70,20 Z" opacity="0.8"/>
+            <path d="M50,10 L70,20 L90,10 L70,0 Z"/>
+            <path d="M70,20 L90,30 L90,60 L70,50 Z"/>
+            <path d="M50,60 L70,50 L90,60 L70,70 Z" opacity="0.7"/>
+            <path d="M70,50 L90,60 L90,90 L70,80 Z" opacity="0.9"/>
+          </svg>
+          <span class="grotesk font-bold tracking-[0.5em] text-sm uppercase italic text-white">LEAD<span class="text-yellow-400">BUSTERS</span></span>
+        </a>
+      </div>
+
+      <!-- Central hero grid -->
+      <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+
+        <!-- LEFT: Main message -->
+        <div>
+
+          <!-- Status badge -->
+          <div class="territory-badge mb-8" role="status">
+            <span class="relative flex">
+              <span class="ring" aria-hidden="true"></span>
+              <span class="ring ring-2" aria-hidden="true"></span>
+              <span class="w-2.5 h-2.5 bg-green-400 rounded-full relative z-10"></span>
+            </span>
+            <span class="text-green-400 text-[10px] font-black uppercase tracking-[0.2em]">Systém potvrdil prijatie</span>
+          </div>
+
+          <!-- Headline -->
+          <div id="headline-wrap" aria-label="Missia prijatá">
+            <div class="overflow-hidden mb-1">
+              <div id="h-line1" class="grotesk text-[12vw] md:text-[80px] lg:text-[76px] font-black italic uppercase leading-none text-white" style="transform: translateY(110%);">
+                MISSIA
+              </div>
+            </div>
+            <div class="overflow-hidden mb-6">
+              <div id="h-line2" class="grotesk text-[12vw] md:text-[80px] lg:text-[76px] font-black italic uppercase leading-none text-yellow-400" style="transform: translateY(110%);">
+                PRIJATÁ.
+              </div>
+            </div>
+          </div>
+
+          <p id="hero-sub" class="text-gray-400 text-lg leading-relaxed mb-10 max-w-md" style="opacity:0; transform: translateY(20px);">
+            Vaše dáta sú u nás v bezpečí. Náš špecialista práve spúšťa analýzu vášho regiónu. Výsledky obdržíte na e-mail — a pravdepodobne skôr, než čakáte.
+          </p>
+
+          <!-- Countdown to contact -->
+          <div id="countdown-wrap" style="opacity:0; transform: translateY(20px);">
+            <p class="text-[9px] uppercase font-black tracking-[0.3em] text-gray-500 mb-3">Predpokladaný čas do kontaktu</p>
+            <div class="flex items-center gap-3" aria-live="polite" aria-atomic="true" aria-label="Odpočet do kontaktu">
+              <div class="digit-block">
+                <div class="grotesk text-3xl font-black text-yellow-400" id="cd-hours">24</div>
+                <div class="text-[8px] uppercase tracking-widest text-gray-500 mt-1">hodín</div>
+              </div>
+              <span class="text-gray-600 text-2xl font-light">:</span>
+              <div class="digit-block">
+                <div class="grotesk text-3xl font-black text-yellow-400" id="cd-minutes">00</div>
+                <div class="text-[8px] uppercase tracking-widest text-gray-500 mt-1">minút</div>
+              </div>
+              <span class="text-gray-600 text-2xl font-light">:</span>
+              <div class="digit-block">
+                <div class="grotesk text-3xl font-black text-yellow-400" id="cd-seconds">00</div>
+                <div class="text-[8px] uppercase tracking-widest text-gray-500 mt-1">sekúnd</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Status panel + CTAs -->
+        <div class="flex flex-col gap-6">
+
+          <!-- Mission status timeline -->
+          <div class="glass p-6 rounded-[28px]" id="status-card" style="opacity:0; transform: translateX(40px);">
+            <div class="flex items-center justify-between mb-6">
+              <h2 class="text-[10px] uppercase font-black tracking-[0.3em] text-gray-400">Stav operácie</h2>
+              <span class="text-[9px] bg-green-500/10 text-green-400 border border-green-500/20 px-3 py-1 rounded-full font-black uppercase tracking-widest">● Live</span>
+            </div>
+
+            <!-- Steps -->
+            <div class="flex flex-col">
+
+              <div class="step done flex items-center gap-4" id="step-a">
+                <div class="step-icon" aria-label="Hotovo">✓</div>
+                <div class="flex-1">
+                  <div class="text-sm font-bold text-white">Dopyt prijatý</div>
+                  <div class="text-[10px] text-gray-500 mt-0.5">Formulár spracovaný a zabezpečený</div>
+                </div>
+                <span class="text-[9px] text-green-400 font-black uppercase tracking-widest shrink-0">OK</span>
+              </div>
+
+              <div class="step-connector lit" aria-hidden="true"></div>
+
+              <div class="step done flex items-center gap-4" id="step-b">
+                <div class="step-icon" aria-label="Hotovo">✓</div>
+                <div class="flex-1">
+                  <div class="text-sm font-bold text-white">Priradenie špecialistu</div>
+                  <div class="text-[10px] text-gray-500 mt-0.5">Váš prípad je u konkrétneho analytika</div>
+                </div>
+                <span class="text-[9px] text-green-400 font-black uppercase tracking-widest shrink-0">OK</span>
+              </div>
+
+              <div class="step-connector" aria-hidden="true"></div>
+
+              <div class="step active flex items-center gap-4" id="step-c">
+                <div class="step-icon text-yellow-400" aria-label="Prebieha">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                </div>
+                <div class="flex-1">
+                  <div class="text-sm font-bold text-white">Analýza regiónu</div>
+                  <div class="text-[10px] text-gray-500 mt-0.5">Skenujeme váš trh a konkurenciu</div>
+                </div>
+                <span class="text-[9px] text-yellow-400 font-black uppercase tracking-widest shrink-0 animate-pulse">...</span>
+              </div>
+
+              <div class="step-connector" aria-hidden="true"></div>
+
+              <div class="step flex items-center gap-4" id="step-d">
+                <div class="step-icon text-gray-600" aria-label="Čaká">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+                </div>
+                <div class="flex-1">
+                  <div class="text-sm font-bold text-gray-600">Kontakt od nás</div>
+                  <div class="text-[10px] text-gray-600 mt-0.5">Zavoláme vám s konkrétnymi číslami</div>
+                </div>
+                <span class="text-[9px] text-gray-700 font-black uppercase tracking-widest shrink-0">—</span>
+              </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="mt-6 pt-5 border-t border-white/5">
+              <div class="flex justify-between text-[9px] uppercase font-black tracking-widest mb-2">
+                <span class="text-gray-500" id="progress-label">Priebeh analýzy</span>
+                <span class="text-yellow-400" id="progress-pct">0%</span>
+              </div>
+              <div class="h-1.5 bg-white/5 rounded-full overflow-hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar-el">
+                <div id="prog-bar" class="h-full rounded-full bg-gradient-to-r from-green-500 to-yellow-400" style="width:0%; transition: width 0.4s ease;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Territory reserved card -->
+          <div class="glass-green p-5 rounded-[24px]" id="territory-card" style="opacity:0; transform: translateX(40px);">
+            <div class="flex items-start gap-4">
+              <div class="text-2xl shrink-0" aria-hidden="true">🗺️</div>
+              <div>
+                <h3 class="text-[10px] uppercase font-black tracking-[0.3em] text-green-400 mb-1">Váš okres je rezervovaný</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">Žiadna iná firma vo vašom odbore a regióne nezíska naše služby, kým pracujeme s vami. <strong class="text-white">Exkluzivita je aktívna.</strong></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA buttons -->
+          <div id="cta-wrap" style="opacity:0; transform: translateY(20px);">
+            <a href="https://calendly.com/info-leadbusters/30min" target="_blank" rel="noopener noreferrer"
+               class="mag glass-accent flex items-center justify-between gap-4 p-5 rounded-[24px] group hover:border-yellow-400/30 transition-all duration-300 mb-3"
+               aria-label="Rezervovať hovor cez Calendly">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-yellow-400 rounded-xl flex items-center justify-center text-black shrink-0 text-lg group-hover:scale-110 transition-transform">📅</div>
+                <div>
+                  <div class="text-sm font-black text-white mb-0.5">Rezervovať hovor</div>
+                  <div class="text-[10px] text-gray-500 uppercase tracking-widest">Preskočte poradie — vyberte si termín</div>
+                </div>
+              </div>
+              <svg class="w-5 h-5 text-gray-600 group-hover:text-yellow-400 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+
+            <a href="https://wa.me/421908403692?text=Zdravím%2C%20práve%20som%20odoslal%20formulár.%20Kedy%20ma%20kontaktujete%3F" target="_blank" rel="noopener noreferrer"
+               class="mag glass flex items-center justify-between gap-4 p-5 rounded-[24px] group hover:border-green-500/30 transition-all duration-300"
+               aria-label="Napísať cez WhatsApp">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-[#25D366] rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .018 5.396.015 12.03c0 2.12.554 4.189 1.605 6.035L0 24l6.105-1.602a11.83 11.83 0 005.937 1.598h.005c6.637 0 12.032-5.395 12.035-12.03a11.791 11.791 0 00-3.517-8.487"></path></svg>
+                </div>
+                <div>
+                  <div class="text-sm font-black text-white mb-0.5">WhatsApp priamo</div>
+                  <div class="text-[10px] text-gray-500 uppercase tracking-widest">Odpoveď do pár minút</div>
+                </div>
+              </div>
+              <svg class="w-5 h-5 text-gray-600 group-hover:text-green-400 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom strip -->
+      <div id="bottom-strip" class="mt-16 pt-8 border-t border-white/[0.04] flex flex-col md:flex-row items-center justify-between gap-4" style="opacity:0;">
+        <a href="index.html" class="text-gray-600 hover:text-white transition text-[10px] uppercase tracking-[0.3em] font-bold flex items-center gap-2">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          Späť na hlavnú stránku
+        </a>
+        <div class="grotesk text-[9px] uppercase tracking-[0.6em] text-gray-700 italic">LeadBusters © 2026</div>
+        <div class="text-[10px] text-gray-600 uppercase tracking-widest font-bold">
+          <span class="text-green-500">●</span> Vaše dáta sú šifrované
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+  // =============================================
+  // PARTICLE CANVAS
+  // =============================================
+  (function() {
+    const canvas = document.getElementById('canvas-bg');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [], animFrame;
+    const COUNT = 60;
+    const MAX_DIST = 130;
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    function createParticle() {
+      return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        r: Math.random() * 1.5 + 0.5,
+        alpha: Math.random() * 0.4 + 0.1
+      };
+    }
+    for (let i = 0; i < COUNT; i++) particles.push(createParticle());
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = W;
+        if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H;
+        if (p.y > H) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(250,204,21,${p.alpha})`;
+        ctx.fill();
+      });
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MAX_DIST) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(250,204,21,${0.06 * (1 - dist / MAX_DIST)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      animFrame = requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  // =============================================
+  // CUSTOM CURSOR
+  // =============================================
+  (function() {
+    if (!window.matchMedia('(hover: hover)').matches) return;
+    const cur = document.getElementById('cursor');
+    const fol = document.getElementById('cursor-follower');
+    let mx = 0, my = 0;
+    document.addEventListener('mousemove', (e) => {
+      mx = e.clientX; my = e.clientY;
+      gsap.to(cur, { x: mx, y: my, duration: 0.08 });
+      gsap.to(fol, { x: mx, y: my, duration: 0.28 });
+    });
+    document.querySelectorAll('.mag, a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cur.style.transform = 'translate(-50%, -50%) scale(3.5)';
+        cur.style.opacity = '0.6';
+      });
+      el.addEventListener('mouseleave', () => {
+        cur.style.transform = 'translate(-50%, -50%) scale(1)';
+        cur.style.opacity = '1';
+      });
+    });
+  })();
+
+  // =============================================
+  // CONFETTI BURST
+  // =============================================
+  function launchConfetti() {
+    const colors = ['#FACC15', '#22C55E', '#FFFFFF', '#FACC15', '#FDE68A'];
+    for (let i = 0; i < 55; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `
+        left: ${40 + Math.random() * 20}vw;
+        top: 45vh;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+        width: ${3 + Math.random() * 6}px;
+        height: ${3 + Math.random() * 6}px;
+      `;
+      document.body.appendChild(el);
+      gsap.to(el, {
+        x: (Math.random() - 0.5) * 600,
+        y: -(200 + Math.random() * 400),
+        rotation: Math.random() * 720 - 360,
+        opacity: 0,
+        duration: 1.2 + Math.random() * 1.2,
+        ease: 'power3.out',
+        delay: Math.random() * 0.4,
+        onComplete: () => el.remove()
+      });
+    }
+  }
+
+  // =============================================
+  // COUNTDOWN TIMER
+  // =============================================
+  function startCountdown() {
+    const TARGET_HOURS = 24;
+    const stored = localStorage.getItem('lb_contact_deadline');
+    let deadline;
+    if (stored) {
+      deadline = new Date(parseInt(stored));
+    } else {
+      deadline = new Date(Date.now() + TARGET_HOURS * 3600 * 1000);
+      localStorage.setItem('lb_contact_deadline', String(deadline.getTime()));
+    }
+
+    function tick() {
+      const diff = deadline - Date.now();
+      if (diff <= 0) {
+        document.getElementById('cd-hours').textContent = '00';
+        document.getElementById('cd-minutes').textContent = '00';
+        document.getElementById('cd-seconds').textContent = '00';
+        return;
+      }
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+      document.getElementById('cd-minutes').textContent = String(m).padStart(2, '0');
+      document.getElementById('cd-seconds').textContent = String(s).padStart(2, '0');
+      setTimeout(tick, 1000);
+    }
+    tick();
+  }
+
+  // =============================================
+  // PROGRESS BAR ANIMATION
+  // =============================================
+  function runProgress() {
+    const bar = document.getElementById('prog-bar');
+    const pct = document.getElementById('progress-pct');
+    const el = document.getElementById('prog-bar-el');
+    const topBar = document.getElementById('top-bar-fill');
+    const obj = { v: 0 };
+
+    gsap.to(obj, {
+      v: 72,
+      duration: 4,
+      ease: 'power2.inOut',
+      onUpdate() {
+        const val = Math.round(obj.v);
+        bar.style.width = val + '%';
+        topBar.style.width = val + '%';
+        pct.textContent = val + '%';
+        el.setAttribute('aria-valuenow', String(val));
+      }
+    });
+  }
+
+  // =============================================
+  // STEP ANIMATIONS
+  // =============================================
+  function animateSteps() {
+    ['step-a', 'step-b', 'step-c', 'step-d'].forEach((id, i) => {
+      gsap.to('#' + id, {
+        opacity: 1, x: 0, duration: 0.6,
+        delay: 1.2 + i * 0.2,
+        ease: 'power3.out'
+      });
+    });
+  }
+
+  // =============================================
+  // MAIN ENTRANCE SEQUENCE
+  // =============================================
+  window.addEventListener('load', () => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReduced) {
+      document.getElementById('page-content').style.opacity = '1';
+      document.querySelectorAll('[style*="opacity:0"]').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+      startCountdown();
+      return;
+    }
+
+    const tl = gsap.timeline();
+
+    // 1. Fade in page
+    tl.to('#page-content', { opacity: 1, duration: 0.4 })
+
+    // 2. Headline lines
+    .to('#h-line1', { y: '0%', duration: 0.9, ease: 'power4.out' }, 0.2)
+    .to('#h-line2', { y: '0%', duration: 0.9, ease: 'power4.out' }, 0.35)
+
+    // 3. Subtext
+    .to('#hero-sub', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.7)
+
+    // 4. Status card slides in
+    .to('#status-card', { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' }, 0.5)
+
+    // 5. Territory card
+    .to('#territory-card', { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out' }, 0.75)
+
+    // 6. CTAs
+    .to('#cta-wrap', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.9)
+
+    // 7. Countdown
+    .to('#countdown-wrap', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 1.0)
+
+    // 8. Bottom
+    .to('#bottom-strip', { opacity: 1, duration: 0.5, ease: 'power2.out' }, 1.1)
+
+    // 9. Confetti & progress after headline lands
+    .call(() => {
+      launchConfetti();
+      runProgress();
+      animateSteps();
+      startCountdown();
+    }, null, 0.4);
+  });
+  </script>
+</body>
+</html>
