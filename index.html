@@ -1472,14 +1472,14 @@
     // ============================================================
     function loadTrackingScripts() {
         const gaScript = document.createElement('script');
-        gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-751PMNS23D";
+        gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-GXTHZS1QMH";
         gaScript.async = true;
         document.head.appendChild(gaScript);
         gaScript.onload = () => {
             window.dataLayer = window.dataLayer || [];
             function gtag() { dataLayer.push(arguments); }
             gtag('js', new Date());
-            gtag('config', 'G-751PMNS23D', { anonymize_ip: true });
+            gtag('config', 'G-GXTHZS1QMH', { anonymize_ip: true });
         };
     }
 
