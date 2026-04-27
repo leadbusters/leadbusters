@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="sk" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digitálny Majster | Blog | LeadBusters</title>
+  <meta name="description" content="Praktické tipy pre remeselníkov a stavebné firmy. Ako získať viac zákaziek, dominovať v regióne a zarobiť viac bez stresu.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.leadbusters.sk/blog.html">
+
+  <meta property="og:title" content="Digitálny Majster | LeadBusters Blog">
+  <meta property="og:description" content="Praktické tipy pre remeselníkov. Ako získať viac zákaziek a dominovať v regióne.">
+  <meta property="og:url" content="https://www.leadbusters.sk/blog.html">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;700;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { accent: '#FACC15', darkBg: '#050505' } } }
+    }
+  </script>
+
+  <style>
+    :root { --accent: #FACC15; --bg: #050505; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .grotesk { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.04em; }
+
+    /* Cursor */
+    #cursor {
+      width: 8px; height: 8px; background: var(--accent);
+      border-radius: 50%; position: fixed; pointer-events: none;
+      z-index: 100000; mix-blend-mode: difference; will-change: transform;
+      transform: translate(-50%,-50%);
+    }
+    #cursor-follower {
+      width: 36px; height: 36px; border: 1.5px solid var(--accent);
+      border-radius: 50%; position: fixed; pointer-events: none;
+      z-index: 99999; transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
+      will-change: transform; transform: translate(-50%,-50%);
+    }
+    @media (hover: none) {
+      body { cursor: auto; }
+      #cursor, #cursor-follower { display: none; }
+    }
+
+    /* Noise */
+    .noise::before {
+      content: ""; position: fixed; inset: 0;
+      background: url('https://grainy-gradients.vercel.app/noise.svg');
+      opacity: 0.04; pointer-events: none; z-index: 0;
+    }
+
+    /* Grid */
+    .grid-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(250,204,21,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(250,204,21,0.02) 1px, transparent 1px);
+      background-size: 70px 70px;
+    }
+
+    /* Glass */
+    .glass {
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Article prose */
+    .prose-lb h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.75rem; font-weight: 900;
+      letter-spacing: -0.03em; text-transform: uppercase;
+      color: #fff; margin: 3rem 0 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .prose-lb h3 {
+      font-size: 1.2rem; font-weight: 800;
+      color: #FACC15; margin: 2rem 0 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .prose-lb p {
+      color: #9CA3AF; line-height: 1.85;
+      margin-bottom: 1.25rem; font-size: 1.05rem;
+    }
+    .prose-lb strong { color: #fff; font-weight: 800; }
+    .prose-lb em { color: #FACC15; font-style: normal; font-weight: 700; }
+
+    .prose-lb ul {
+      list-style: none; padding: 0; margin: 1.5rem 0;
+    }
+    .prose-lb ul li {
+      color: #9CA3AF; padding: 0.6rem 0 0.6rem 2rem;
+      position: relative; border-bottom: 1px solid rgba(255,255,255,0.04);
+      line-height: 1.7;
+    }
+    .prose-lb ul li::before {
+      content: "→"; position: absolute; left: 0;
+      color: #FACC15; font-weight: 900;
+    }
+
+    /* Chyba box */
+    .chyba-box {
+      background: rgba(239,68,68,0.05);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-left: 4px solid #EF4444;
+      border-radius: 16px; padding: 1.5rem 1.75rem;
+      margin: 2rem 0;
+    }
+    .chyba-box .chyba-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; background: #EF4444;
+      border-radius: 50%; color: #fff; font-weight: 900;
+      font-size: 14px; margin-bottom: 0.75rem; flex-shrink: 0;
+    }
+
+    /* Highlight quote */
+    .highlight-quote {
+      background: rgba(250,204,21,0.05);
+      border: 1px solid rgba(250,204,21,0.15);
+      border-left: 4px solid #FACC15;
+      border-radius: 16px; padding: 1.5rem 1.75rem;
+      margin: 2rem 0;
+    }
+    .highlight-quote p {
+      color: #fff !important; font-size: 1.15rem !important;
+      font-weight: 700 !important; margin: 0 !important;
+    }
+
+    /* CTA box */
+    .cta-box {
+      background: linear-gradient(135deg, rgba(250,204,21,0.08), rgba(250,204,21,0.03));
+      border: 1px solid rgba(250,204,21,0.2);
+      border-radius: 24px; padding: 2.5rem;
+      text-align: center; margin: 3rem 0;
+    }
+
+    /* Progress bar */
+    #read-progress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, #22C55E, #FACC15);
+      z-index: 9999; transition: width 0.1s ease;
+      box-shadow: 0 0 10px rgba(250,204,21,0.5);
+    }
+
+    /* Blog card hover */
+    .blog-card {
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .blog-card:hover {
+      border-color: rgba(250,204,21,0.3) !important;
+      transform: translateY(-4px);
+    }
+
+    /* Reveal */
+    .sr { opacity: 0; transform: translateY(30px); }
+    .sr.visible { opacity: 1; transform: translateY(0); transition: all 0.7s cubic-bezier(0.16,1,0.3,1); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: rgba(250,204,21,0.3); border-radius: 2px; }
+
+    :focus-visible { outline: 2px solid rgba(250,204,21,0.5); outline-offset: 3px; }
+  </style>
+</head>
+
+<body class="noise">
+
+  <!-- Cursor -->
+  <div id="cursor" aria-hidden="true"></div>
+  <div id="cursor-follower" aria-hidden="true"></div>
+
+  <!-- Read progress -->
+  <div id="read-progress" style="width:0%" aria-hidden="true"></div>
+
+  <!-- Skip -->
+  <a href="#main" class="sr-only focus:not-sr-only fixed top-4 left-4 z-[200000] bg-yellow-400 text-black px-4 py-2 rounded font-bold text-sm">Preskočiť na obsah</a>
+
+  <!-- Backgrounds -->
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="fixed w-[500px] h-[500px] rounded-full pointer-events-none z-0" style="background:rgba(250,204,21,0.04);top:-15%;left:-10%;filter:blur(130px);" aria-hidden="true"></div>
+
+  <!-- Top accent -->
+  <div class="fixed top-0 left-0 w-full h-[2px] z-50" style="background:linear-gradient(90deg,transparent,#FACC15 30%,#22C55E 70%,transparent);" aria-hidden="true"></div>
+
+  <!-- NAV -->
+  <nav class="fixed top-2 w-full z-[100] px-6 md:px-12 py-5 flex justify-between items-center" aria-label="Navigácia">
+    <a href="index.html" class="flex items-center gap-3 opacity-70 hover:opacity-100 transition-opacity" aria-label="Späť na LeadBusters">
+      <svg class="h-7 w-auto fill-yellow-400" viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M10,90 L10,60 L30,50 L30,80 Z" opacity="0.6"/>
+        <path d="M10,60 L30,50 L50,60 L30,70 Z"/>
+        <path d="M30,50 L30,20 L50,10 L70,20 Z" opacity="0.8"/>
+        <path d="M50,10 L70,20 L90,10 L70,0 Z"/>
+        <path d="M70,20 L90,30 L90,60 L70,50 Z"/>
+        <path d="M50,60 L70,50 L90,60 L70,70 Z" opacity="0.7"/>
+        <path d="M70,50 L90,60 L90,90 L70,80 Z" opacity="0.9"/>
+      </svg>
+      <span class="grotesk font-bold tracking-[0.4em] text-xs uppercase italic text-white">LEAD<span class="text-yellow-400">BUSTERS</span></span>
+    </a>
+    <a href="index.html#kontakt" class="bg-yellow-400 text-black px-6 py-3 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-white transition-colors">Získať dopyty</a>
+  </nav>
+
+  <!-- HERO BLOG HEADER -->
+  <header class="relative z-10 pt-32 pb-20 px-6 md:px-12 border-b border-white/5">
+    <div class="max-w-4xl mx-auto">
+      <div class="inline-flex items-center gap-2 bg-yellow-400/10 border border-yellow-400/20 px-4 py-2 rounded-full mb-8">
+        <span class="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" aria-hidden="true"></span>
+        <span class="text-yellow-400 text-[10px] font-black uppercase tracking-[0.3em]">Digitálny Majster</span>
+      </div>
+      <h1 class="grotesk text-5xl md:text-7xl font-black italic uppercase leading-none mb-6">
+        Digitálny<br><span class="text-yellow-400">Majster.</span>
+      </h1>
+      <p class="text-gray-400 text-xl font-light leading-relaxed max-w-2xl">
+        Praktické tipy pre remeselníkov a stavebné firmy. Žiadna teória — len to čo reálne funguje na slovenskom trhu.
+      </p>
+    </div>
+  </header>
+
+  <main id="main" class="relative z-10">
+
+    <!-- FEATURED ARTICLE -->
+    <article class="max-w-4xl mx-auto px-6 md:px-12 py-20" aria-labelledby="article-title">
+
+      <!-- Article header -->
+      <div class="mb-12 sr">
+        <div class="flex flex-wrap items-center gap-3 mb-6">
+          <span class="bg-red-500/10 border border-red-500/20 text-red-400 text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full">Musíte čítať</span>
+          <span class="text-gray-600 text-[10px] uppercase tracking-widest font-bold">5 min čítania</span>
+          <span class="text-gray-600 text-[10px] uppercase tracking-widest font-bold">· Apríl 2026</span>
+        </div>
+
+        <h2 id="article-title" class="grotesk text-3xl md:text-5xl font-black italic uppercase leading-tight text-white mb-6">
+          Prečo remeselníci strácajú zákazky každý deň — a 5 chýb ktoré to spôsobujú
+        </h2>
+
+        <p class="text-gray-400 text-xl leading-relaxed mb-8">
+          Každý deň vo vašom okrese niekto hľadá pokrývača, murára alebo stolára. A každý deň tí ľudia zavolajú niekomu inému — nie vám. Prečo? Lebo na internete ste neviditeľní. Tu je 5 konkrétnych dôvodov prečo.
+        </p>
+
+        <!-- Author -->
+        <div class="flex items-center gap-4 p-5 glass rounded-2xl">
+          <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-black font-black text-lg shrink-0">LB</div>
+          <div>
+            <div class="text-white font-black text-sm">LeadBusters Team</div>
+            <div class="text-gray-500 text-[10px] uppercase tracking-widest">Digitálny marketing pre remeselníkov</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Article content -->
+      <div class="prose-lb sr" style="transition-delay: 0.1s">
+
+        <div class="highlight-quote">
+          <p>"Väčšina remeselníkov na Slovensku stráca 60-80% potenciálnych zákaziek len preto, že ich klient nemôže nájsť alebo im nemôže dôverovať online. To sú peniaze ktoré idú priamo k vašej konkurencii."</p>
+        </div>
+
+        <p>
+          Predstavte si: ráno vstane pani Marta z Nitry a jej strecha začne pretekať. Zoberie telefón, otvorí Google a napíše <em>"pokrývač Nitra"</em>. Za 30 sekúnd si vyberie niekoho komu zavolá. <strong>Vy ste v tej liste? Alebo ste neviditeľní?</strong>
+        </p>
+
+        <p>
+          Preskúmali sme stovky webstránok slovenských remeselníkov a stavebných firiem. Opakovane sme nachádzali rovnaké chyby — chyby ktoré stoja majiteľov tisíce eur mesačne. Tu sú:
+        </p>
+
+        <!-- CHYBA 1 -->
+        <h2>Chyba č.1: Web ktorý nevyzerá dôveryhodne</h2>
+
+        <div class="chyba-box">
+          <div class="flex items-start gap-4">
+            <div class="chyba-num">1</div>
+            <div>
+              <h3 style="margin:0 0 0.5rem; color:#EF4444;">Váš web vyzerá ako z roku 2008</h3>
+              <p style="margin:0;">Klient vás posudzuje za 3 sekundy. Starý, pomalý, neprehľadný web = nedôveryhodný majster. Koniec hovoru.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          Toto nie je o estetike — je to o <strong>psychológii dôvery</strong>. Keď zákazník vidí moderný, rýchly web s jasnými cenami a referencami, automaticky predpokladá že ste profesionál. Keď vidí starý web s rozbitými obrázkami — odíde.
+        </p>
+
+        <p>
+          Štúdie ukazujú že <em>75% ľudí posudzuje dôveryhodnosť firmy podľa dizajnu webu</em>. Nie podľa referencií. Nie podľa rokov skúseností. Podľa toho ako web vyzerá na prvý pohľad.
+        </p>
+
+        <h3>Ako to opraviť:</h3>
+        <ul>
+          <li>Web musí byť rýchly — načítanie do 2 sekúnd</li>
+          <li>Musí byť prehľadný na mobile — 80% ľudí hľadá z telefónu</li>
+          <li>Musí mať jasné tlačidlo "Zavolať" alebo "Dopytovať"</li>
+          <li>Musí obsahovať fotky vašej práce — nie stockové obrázky</li>
+        </ul>
+
+        <!-- CHYBA 2 -->
+        <h2>Chyba č.2: Nie ste na Googli keď vás niekto hľadá</h2>
+
+        <div class="chyba-box">
+          <div class="flex items-start gap-4">
+            <div class="chyba-num">2</div>
+            <div>
+              <h3 style="margin:0 0 0.5rem; color:#EF4444;">Google o vás nevie</h3>
+              <p style="margin:0;">Ak nie ste na prvej strane Googlu keď niekto hľadá vaše remeslo v vašom meste — pre toho zákazníka neexistujete.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          Každý mesiac ľudia vo vašom okrese zadávajú do Googlu stovky hľadaní ako <em>"pokrývač [vaše mesto]"</em>, <em>"rekonštrukcia kúpeľne [vaše mesto]"</em>, <em>"stolár na mieru [vaše mesto]"</em>. <strong>Koľko z týchto dopytov skončí u vás?</strong>
+        </p>
+
+        <p>
+          Väčšina remeselníkov sa spolieha výhradne na odporúčania od susedov a rodiny. To funguje — ale má strop. Google vám prinesie zákazníkov ktorých nepoznáte a ktorí by vás inak nikdy nenašli.
+        </p>
+
+        <div class="highlight-quote">
+          <p>"97% ľudí hľadá miestne firmy online. Z toho 78% navštívi firmu alebo zavolá do 24 hodín od vyhľadávania."</p>
+        </div>
+
+        <h3>Ako to opraviť:</h3>
+        <ul>
+          <li>Zaregistrujte sa na Google Business Profile — zadarmo, trvá 15 minút</li>
+          <li>Získajte aspoň 10 recenzií od spokojných klientov</li>
+          <li>Spustite Google Ads cielené na váš región — viditeľnosť okamžite</li>
+          <li>Optimalizujte web pre kľúčové slová vo vašom odbore a meste</li>
+        </ul>
+
+        <!-- CHYBA 3 -->
+        <h2>Chyba č.3: Nezdvíhate telefón — a nič sa nestane</h2>
+
+        <div class="chyba-box">
+          <div class="flex items-start gap-4">
+            <div class="chyba-num">3</div>
+            <div>
+              <h3 style="margin:0 0 0.5rem; color:#EF4444;">Zákazník volá — nikto neberie — zákazník volá konkurencii</h3>
+              <p style="margin:0;">Ste na streche, pod autom alebo na obede. Telefón nezoberiete. Zákazník nečaká — zavolá ďalšiemu v zozname.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          Toto je jedna z najbolestivejších strát. <strong>Zákazník bol rozhodnutý kúpiť.</strong> Mal peniaze. Mal záujem. Chcel iba zavolať a dohodnúť sa. Ale vy ste nezobral — a on zavolal niekomu inému.
+        </p>
+
+        <p>
+          Prieskumy ukazujú že <em>85% zákazníkov ktorých nenechajú odpoveď nezavolá znova</em>. Jednoducho idú ďalej. Tá zákazka — preč. Navždy.
+        </p>
+
+        <h3>Ako to opraviť:</h3>
+        <ul>
+          <li>Automatická SMS odpoveď do 60 sekúnd od zmeškaného hovoru</li>
+          <li>Text: "Práve pracujem, ozvem sa vám do hodiny. Napíšte čo potrebujete."</li>
+          <li>Nastavenie trvá 30 minút — zachráni desiatky zákaziek ročne</li>
+          <li>Zákazník vie že ste zaneprázdnení profesionál, nie že ste ho ignorovali</li>
+        </ul>
+
+        <!-- CHYBA 4 -->
+        <h2>Chyba č.4: Žiadne recenzie — žiadna dôvera</h2>
+
+        <div class="chyba-box">
+          <div class="flex items-start gap-4">
+            <div class="chyba-num">4</div>
+            <div>
+              <h3 style="margin:0 0 0.5rem; color:#EF4444;">Máte skvelú prácu ale nikto o tom nevie</h3>
+              <p style="margin:0;">Online recenzie sú nový word-of-mouth. Bez nich ste neznáma firma bez histórie.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          Keď zákazník hľadá remeselníka, porovnáva. Vidí firmu s <em>0 recenziami</em> a firmu s <em>47 recenziami s hodnotením 4.8 hviezdičky</em>. Komu zavolá? <strong>Odpoveď je zrejmá.</strong>
+        </p>
+
+        <p>
+          Pritom väčšina vašich spokojných klientov by vám recenziu rada napísala — len ich nikto nepoprosil. Stačí po dokončení práce povedať: <em>"Ak ste spokojní, veľmi by mi pomohlo ak napíšete krátku recenziu na Google."</em> Väčšina ľudí to spraví ráda.
+        </p>
+
+        <h3>Ako to opraviť:</h3>
+        <ul>
+          <li>Požiadajte každého spokojného klienta o Google recenziu</li>
+          <li>Pošlite im priamy link — nech nemusia nič hľadať</li>
+          <li>Cieľ: 20+ recenzií s hodnotením nad 4.5 — to vás posunie na vrchol</li>
+          <li>Odpovedajte na každú recenziu — ukazuje to záujem o klientov</li>
+        </ul>
+
+        <!-- CHYBA 5 -->
+        <h2>Chyba č.5: Žiadny systém — chaos v komunikácii</h2>
+
+        <div class="chyba-box">
+          <div class="flex items-start gap-4">
+            <div class="chyba-num">5</div>
+            <div>
+              <h3 style="margin:0 0 0.5rem; color:#EF4444;">Čísla na zdrapoch papiera, emaily ktoré čakajú týždne</h3>
+              <p style="margin:0;">Bez systému strácate zákazky nie preto že nie ste dobrý majster — ale preto že nie ste organizovaný.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          Toto je realita väčšiny remeselníkov: <em>čísla vo telefóne bez mena, papieriky v dodávke, emaily na ktoré sa zabudne odpovedať, dopyty ktoré "niekde boli"</em>. <strong>Peniaze sa strácajú v chaose.</strong>
+        </p>
+
+        <p>
+          Profesionálna firma — aj keď je to jeden majster s pomocníkom — potrebuje jednoduchý systém. Nie komplikovaný softvér za tisíce eur. Stačí vedieť: kto čaká na odpoveď, komu ste poslali cenovú ponuku, kto zaplatil.
+        </p>
+
+        <h3>Ako to opraviť:</h3>
+        <ul>
+          <li>Jednoduchý digitálny dispečing — vidíte každý dopyt v jednom mieste</li>
+          <li>Stavy: Nový dopyt → Kontaktovaný → Cenová ponuka → Zákazka → Zaplatené</li>
+          <li>Funguje na mobile — vidíte všetko aj na stavbe</li>
+          <li>Žiadne stratené čísla, žiadne zabudnuté dopyty</li>
+        </ul>
+
+        <!-- Záver -->
+        <h2>Záver: Toto nie je o technológii</h2>
+
+        <p>
+          Všetky tieto chyby majú jedno spoločné: <strong>dajú sa opraviť.</strong> Nie za mesiace — za dni. Nepotrebujete byť IT expert. Nepotrebujete veľký rozpočet. Potrebujete správny systém a niekoho kto vám ho postaví.
+        </p>
+
+        <div class="highlight-quote">
+          <p>"Najlepší remeselník v regióne nie je ten kto má najlepšie ruky. Je to ten kto sa dokáže dostať k zákazníkovi skôr ako konkurencia."</p>
+        </div>
+
+        <p>
+          Práve preto existuje LeadBusters. Neučíme vás marketing — <em>robíme ho za vás</em>. Vy ostávate na stavbe. Dopyty chodia samy.
+        </p>
+
+        <!-- CTA -->
+        <div class="cta-box">
+          <div class="text-3xl mb-4" aria-hidden="true">🎯</div>
+          <h3 style="color:#FACC15; font-size:1.5rem; margin:0 0 0.75rem; text-transform:uppercase;">Zistite koľko zákaziek práve strácate</h3>
+          <p style="color:#9CA3AF; margin:0 0 1.5rem;">Bezplatná analýza vášho trhu a konkurencie. Žiadne záväzky.</p>
+          <a href="index.html#kontakt" class="inline-block bg-yellow-400 text-black px-8 py-4 rounded-full font-black uppercase tracking-widest text-sm hover:bg-white transition-all shadow-xl">
+            Chcem bezplatnú analýzu 🔥
+          </a>
+          <p style="color:#4B5563; font-size:0.75rem; margin:1rem 0 0; text-transform:uppercase; letter-spacing:0.1em;">Prvých 5 dopytov zadarmo · Zero-Risk protokol</p>
+        </div>
+
+      </div>
+
+      <!-- Tags -->
+      <div class="flex flex-wrap gap-3 mt-12 pt-8 border-t border-white/5 sr" style="transition-delay:0.2s">
+        <span class="text-[9px] uppercase tracking-widest text-gray-600 font-black mr-2 mt-1">Témy:</span>
+        <span class="bg-white/5 border border-white/10 text-gray-400 text-[10px] font-bold px-3 py-1 rounded-full">#remeselníci</span>
+        <span class="bg-white/5 border border-white/10 text-gray-400 text-[10px] font-bold px-3 py-1 rounded-full">#marketing</span>
+        <span class="bg-white/5 border border-white/10 text-gray-400 text-[10px] font-bold px-3 py-1 rounded-full">#zákazky</span>
+        <span class="bg-white/5 border border-white/10 text-gray-400 text-[10px] font-bold px-3 py-1 rounded-full">#google</span>
+        <span class="bg-white/5 border border-white/10 text-gray-400 text-[10px] font-bold px-3 py-1 rounded-full">#digitálny-majster</span>
+      </div>
+    </article>
+
+    <!-- MORE ARTICLES (placeholder) -->
+    <section class="border-t border-white/5 py-20 px-6 md:px-12 bg-[#080808]" aria-labelledby="more-articles">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-12 sr">
+          <p class="text-[10px] uppercase font-black tracking-[0.3em] text-yellow-400 mb-3">Ďalšie články</p>
+          <h2 id="more-articles" class="grotesk text-3xl font-black italic uppercase text-white">Čoskoro na blogu</h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="blog-card glass p-6 rounded-[24px] border border-white/5 sr" style="transition-delay:0.1s">
+            <span class="text-[9px] uppercase tracking-widest text-gray-600 font-black block mb-4">Pripravujeme</span>
+            <h3 class="text-white font-black text-base uppercase italic mb-3">Ako nastaviť Google Ads pre pokrývača za 1 hodinu</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Krok za krokom — od nuly k prvým dopytom z Googlu.</p>
+          </div>
+          <div class="blog-card glass p-6 rounded-[24px] border border-white/5 sr" style="transition-delay:0.2s">
+            <span class="text-[9px] uppercase tracking-widest text-gray-600 font-black block mb-4">Pripravujeme</span>
+            <h3 class="text-white font-black text-base uppercase italic mb-3">Ako získať prvých 20 Google recenzií do mesiaca</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Jednoduchá stratégia ktorá funguje bez otravného prosenia.</p>
+          </div>
+          <div class="blog-card glass p-6 rounded-[24px] border border-white/5 sr" style="transition-delay:0.3s">
+            <span class="text-[9px] uppercase tracking-widest text-gray-600 font-black block mb-4">Pripravujeme</span>
+            <h3 class="text-white font-black text-base uppercase italic mb-3">Sezónnosť v remesle — ako zarobiť aj v januári</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Ako vyplniť kalendár aj v mŕtvej sezóne pomocou digitálneho marketingu.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BACK TO HOME -->
+    <div class="py-16 px-6 text-center border-t border-white/5">
+      <a href="index.html" class="inline-flex items-center gap-3 text-gray-600 hover:text-white transition text-[10px] uppercase tracking-[0.3em] font-bold">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Späť na LeadBusters.sk
+      </a>
+      <div class="mt-6 grotesk text-[9px] uppercase tracking-[0.6em] text-gray-800 italic">LeadBusters © 2026 — Digitálny Majster</div>
+      <p class="mt-3 text-gray-700 text-[9px] leading-relaxed max-w-md mx-auto">© 2026 LeadBusters &amp; Digitálny Majster. Všetky práva vyhradené. Obsah tohto blogu je chránený autorským zákonom. Kopírovanie, šírenie alebo použitie bez písomného súhlasu je zakázané.</p>
+    </div>
+
+  </main>
+
+  <script>
+  // Cursor
+  (function() {
+    if (!window.matchMedia('(hover: hover)').matches) return;
+    const cur = document.getElementById('cursor');
+    const fol = document.getElementById('cursor-follower');
+    document.addEventListener('mousemove', (e) => {
+      gsap.to(cur, { x: e.clientX, y: e.clientY, duration: 0.08 });
+      gsap.to(fol, { x: e.clientX, y: e.clientY, duration: 0.28 });
+    });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => { cur.style.transform = 'translate(-50%,-50%) scale(3.5)'; });
+      el.addEventListener('mouseleave', () => { cur.style.transform = 'translate(-50%,-50%) scale(1)'; });
+    });
+  })();
+
+  // Read progress
+  window.addEventListener('scroll', () => {
+    const scrollPx = document.documentElement.scrollTop;
+    const winH = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    document.getElementById('read-progress').style.width = winH > 0 ? `${(scrollPx / winH) * 100}%` : '0%';
+  }, { passive: true });
+
+  // Scroll reveal
+  (function() {
+    const els = document.querySelectorAll('.sr');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    els.forEach(el => obs.observe(el));
+  })();
+  </script>
+</body>
+</html>
