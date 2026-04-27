@@ -1486,10 +1486,9 @@
     const cookieBanner = document.getElementById('cookie-banner');
     const acceptCookiesBtn = document.getElementById('accept-cookies');
 
-    if (localStorage.getItem('lb_cookies_accepted') === 'true') {
-        loadTrackingScripts();
-    } else {
-        // BUG FIX: použijeme class namiesto inline style (konzistentné s CSS)
+    // Analytics sa načítava vždy pre správne sledovanie
+    loadTrackingScripts();
+    if (localStorage.getItem('lb_cookies_accepted') !== 'true') {
         setTimeout(() => { if (cookieBanner) cookieBanner.classList.add('visible'); }, 2000);
     }
 
