@@ -17,24 +17,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <meta name="apple-mobile-web-app-title" content="LeadBusters">
     <link rel="manifest" href="/site.webmanifest">
 
-    <!-- Google Analytics - priamo v head -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GXTHZS1QMH"></script>
+    <!-- GA4 cez GTM - definujeme gtag funkciu pre tracking eventy -->
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-GXTHZS1QMH');
     </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LeadBusters | Strategic Digital Dominance</title>
-    <meta name="description" content="Elitný marketingový tím zameraný výhradne na remeselníkov a stavebné firmy. Generujeme dopyty, nie lajky.">
+    <title>LeadBusters | Dopyty pre Remeselníkov a Stavebné Firmy na Slovensku</title>
+    <meta name="description" content="Generujeme reálnych platiacich klientov pre remeselníkov, pokrývačov, murárov a stavebné firmy na Slovensku. Prvých 5 dopytov zadarmo. Zero-risk garancia. Volajte 0908 403 692.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.leadbusters.sk">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="LeadBusters | Váš Rast. Náš Kód.">
-    <meta property="og:description" content="Elitný marketingový startup zameraný výhradne na remeselníkov a stavebné firmy. Generujeme dopyty, nie lajky.">
+    <meta property="og:title" content="LeadBusters | Dopyty pre Remeselníkov | Váš Rast. Náš Kód.">
+    <meta property="og:description" content="Generujeme reálnych platiacich klientov pre remeselníkov a stavebné firmy. Prvých 5 dopytov zadarmo. Zero-risk garancia 30 dní.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1504307651254-35680f356f12?q=80&w=1200&auto=format&fit=crop">
     <meta property="og:url" content="https://www.leadbusters.sk">
     <meta property="og:type" content="website">
@@ -42,8 +40,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="LeadBusters | Váš Rast. Náš Kód.">
-    <meta name="twitter:description" content="Elitný marketingový startup zameraný výhradne na remeselníkov a stavebné firmy. Generujeme dopyty, nie lajky.">
+    <meta name="twitter:title" content="LeadBusters | Dopyty pre Remeselníkov | Váš Rast. Náš Kód.">
+    <meta name="twitter:description" content="Generujeme reálnych platiacich klientov pre remeselníkov a stavebné firmy. Prvých 5 dopytov zadarmo.">
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1504307651254-35680f356f12?q=80&w=1200&auto=format&fit=crop">
 
     <!-- PERFORMANCE: Preconnect pre externé zdroje -->
@@ -84,7 +82,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         "@type": "PostalAddress",
         "addressCountry": "SK"
       },
-      "sameAs": [],
+      "sameAs": ["https://www.tiktok.com/@leadbusters.sk"],
+      "keywords": "marketing pre remeselníkov, dopyty pre stavebné firmy, lead generation Slovensko, pokrývač marketing, murár reklama, stolár dopyty",
       "priceRange": "€€",
       "openingHours": "Mo-Fr 08:00-12:00"
     }
@@ -320,13 +319,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <!-- Top bar -->
     <div class="fixed top-0 w-full bg-yellow-400 text-black text-center text-[9px] md:text-[10px] py-2 font-bold uppercase tracking-widest z-[1000] syncopate shadow-md" role="banner">
-        Spúšťame systémy. Prijímame 2 exkluzívnych partnerov na prvý mesiac.
+        Spúšťame systémy. Prijímame 2 exkluzívnych partnerov — <span id="topbar-month">tento mesiac</span>.
     </div>
 
     <!-- Navigácia -->
     <nav class="fixed top-8 w-full z-[100] p-6 md:p-10 flex justify-between items-center bg-gradient-to-b dark:from-[#050505] from-white to-transparent pointer-events-none" aria-label="Hlavná navigácia">
         <div class="w-full flex justify-between items-center pointer-events-auto">
-            <a href="#" class="magnetic flex items-center gap-3" aria-label="LeadBusters - Domov">
+            <a href="/" class="magnetic flex items-center gap-3" aria-label="LeadBusters - Domov">
                 <svg class="h-10 w-auto fill-yellow-400" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <defs><filter id="LB-Glow"><feGaussianBlur in="SourceGraphic" stdDeviation="2.5"/></filter></defs>
                     <g filter="url(#LB-Glow)">
@@ -1170,6 +1169,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </div>
         </div>
         <div class="syncopate font-bold tracking-[1em] text-[10px] opacity-20 uppercase italic dark:text-white text-black">LeadBusters &copy; 2026</div>
+        <div class="flex justify-center gap-6 mt-6 mb-4">
+            <a href="https://www.tiktok.com/@leadbusters.sk" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-yellow-400 transition text-[9px] uppercase tracking-widest font-bold flex items-center gap-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.27 8.27 0 0 0 4.84 1.54V6.78a4.85 4.85 0 0 1-1.07-.09z"/></svg>
+                TikTok
+            </a>
+            <a href="https://wa.me/421908403692" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-green-400 transition text-[9px] uppercase tracking-widest font-bold flex items-center gap-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.414 0 .018 5.396.015 12.03c0 2.12.554 4.189 1.605 6.035L0 24l6.105-1.602a11.83 11.83 0 0 0 5.937 1.598h.005c6.637 0 12.032-5.395 12.035-12.03a11.791 11.791 0 0 0-3.517-8.487"></path></svg>
+                WhatsApp
+            </a>
+            <a href="mailto:info.leadbusters@gmail.com" class="text-gray-600 hover:text-yellow-400 transition text-[9px] uppercase tracking-widest font-bold">Email</a>
+        </div>
         <a href="blog.html" class="text-gray-500 hover:text-yellow-400 text-[9px] uppercase tracking-widest mt-6 inline-block transition mr-6">Digitálny Majster — Blog</a>
         <a href="gdpr.html" class="text-gray-500 hover:text-yellow-400 text-[9px] uppercase tracking-widest mt-6 inline-block transition">Ochrana osobných údajov</a>
         <p class="text-gray-700 text-[9px] mt-4 max-w-md mx-auto leading-relaxed">© 2026 LeadBusters. Všetky práva vyhradené. Obsah tejto stránky je chránený autorským zákonom. Kopírovanie, šírenie alebo použitie bez písomného súhlasu je zakázané.</p>
@@ -1184,6 +1194,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </p>
             <div class="flex gap-4 shrink-0">
                 <button id="accept-cookies" class="bg-yellow-400 text-black px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all shadow-[0_0_15px_rgba(250,204,21,0.2)]">Súhlasím</button>
+                <button id="decline-cookies" class="border border-gray-700 text-gray-500 px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest hover:border-gray-500 hover:text-gray-300 transition-all">Odmietnuť</button>
             </div>
         </div>
     </div>
@@ -1234,7 +1245,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     // ============================================================
     const months = ["Január","Február","Marec","Apríl","Máj","Jún","Júl","August","September","Október","November","December"];
     const currentMonthEl = document.getElementById('current-month');
+    const topbarMonthEl = document.getElementById('topbar-month');
     if (currentMonthEl) currentMonthEl.innerText = months[new Date().getMonth()];
+    if (topbarMonthEl) topbarMonthEl.innerText = months[new Date().getMonth()];
 
     // ============================================================
     // PRELOADER + ANIMÁCIA MONEY TICKERU PO NAČÍTANÍ
@@ -1495,16 +1508,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     // GDPR COOKIES
     // ============================================================
     function loadTrackingScripts() {
-        const gaScript = document.createElement('script');
-        gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-GXTHZS1QMH";
-        gaScript.async = true;
-        document.head.appendChild(gaScript);
-        gaScript.onload = () => {
-            window.dataLayer = window.dataLayer || [];
-            function gtag() { dataLayer.push(arguments); }
-            gtag('js', new Date());
-            gtag('config', 'G-GXTHZS1QMH', { anonymize_ip: true });
-        };
+        gtag('config', 'G-GXTHZS1QMH', { anonymize_ip: true });
     }
 
     const cookieBanner = document.getElementById('cookie-banner');
@@ -1521,6 +1525,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             localStorage.setItem('lb_cookies_accepted', 'true');
             if (cookieBanner) cookieBanner.classList.remove('visible');
             loadTrackingScripts();
+        });
+    }
+
+    const declineCookiesBtn = document.getElementById('decline-cookies');
+    if (declineCookiesBtn) {
+        declineCookiesBtn.addEventListener('click', () => {
+            localStorage.setItem('lb_cookies_accepted', 'declined');
+            if (cookieBanner) cookieBanner.classList.remove('visible');
         });
     }
 
@@ -1600,10 +1612,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 }
             })
             .catch(() => {
-                alert("Ups, niečo sa pokazilo. Skúste to znova alebo nás kontaktujte priamo.");
-                submitBtn.innerText = originalText;
+                submitBtn.innerText = "⚠ Skúste znova";
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('animate-pulse');
+                submitBtn.classList.add('bg-red-500', 'text-white');
+                setTimeout(() => {
+                    submitBtn.innerText = originalText;
+                    submitBtn.classList.remove('bg-red-500', 'text-white');
+                }, 3000);
             });
         });
     }
